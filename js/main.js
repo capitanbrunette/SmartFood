@@ -17,5 +17,6 @@ function signIn(){
 	  document.getElementById("master").style["display"]="none";
 	  document.getElementById("master").style["visibility"]="hidden";
 	  document.getElementById("home").style["display"]="inline";
+	  $('.modal-backdrop').remove();
 	  //initList();
 };
