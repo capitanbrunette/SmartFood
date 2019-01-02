@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="installedFeatures">
+		<item value="org.eclipse.cdt.gdb:9.3.2.201709131603"/>
+		<item value="org.eclipse.cdt:9.3.2.201709131603"/>
+		<item value="org.eclipse.emf.common:2.13.0.v20170609-0707"/>
+		<item value="org.eclipse.emf.ecore:2.13.0.v20170609-0707"/>
+		<item value="org.eclipse.help:2.2.101.v20171009-0410"/>
+		<item value="org.eclipse.platform:4.7.1.v20171009-0410"/>
+		<item value="org.eclipse.rcp:4.7.1.v20171009-0410"/>
+		<item value="org.tizen.common.feature:2.0.0.201810060600"/>
+		<item value="org.tizen.dynamicanalysis.ide.web.eplugin.feature:2.1.0.201705151001"/>
+		<item value="org.tizen.ocf.bridge.feature:2.0.0.201809120653"/>
+		<item value="org.tizen.ocf.cert.feature:2.0.0.201809190744"/>
+		<item value="org.tizen.ocf.core.feature:2.0.0.201810230521"/>
+		<item value="org.tizen.web.feature:2.0.0.201810041347"/>
+		<item value="org.tizen.web.tv.sec.feature:1.0.0.201807181845"/>
+	</list>
+</section>

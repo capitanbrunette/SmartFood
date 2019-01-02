@@ -1,21 +1,21 @@
 
 window.onload = function () {
     // TODO:: Do your initialization job
-
-    // add eventListener for tizenhwkey
-    document.addEventListener('tizenhwkey', function(e) {
-        if(e.keyName == "back")
+	    // add eventListener for tizenhwkey
+	document.addEventListener('tizenhwkey', function(e) {
+	    if(e.keyName == "back")
 	try {
 	    tizen.application.getCurrentApplication().exit();
+	    //console.log(tizen.tvinputdevice.getSupportedKeys());
 	} catch (ignore) {
 	}
-    });
-
-    // Sample code
-    var textbox = document.querySelector('.contents');
-    textbox.addEventListener("click", function(){
-    	box = document.querySelector('#textbox');
-    	box.innerHTML = box.innerHTML == "Basic" ? "Sample" : "Basic";
-    });
+	});
     
+};
+
+function signIn(){
+	  document.getElementById("master").style["display"]="none";
+	  document.getElementById("master").style["visibility"]="hidden";
+	  document.getElementById("home").style["display"]="inline";
+	  //initList();
 };
