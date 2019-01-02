@@ -18,5 +18,6 @@ function signIn(){
 	  document.getElementById("master").style["visibility"]="hidden";
 	  document.getElementById("home").style["display"]="inline";
 	  $('.modal-backdrop').remove();
+	  //Comentari de provAAAAAA
 	  //initList();
 };
