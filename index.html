@@ -18,6 +18,20 @@
 	
 	<link rel="stylesheet" type="text/css" href="css/style.css"/> 
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/airtable.browser.js"></script>
+    <script type="text/javascript" src="js/smftv.airtable.js"></script>
+    
+    
+    <script type="text/javascript">
+        var capa="#featured";
+        var vista="featured";
+        var taula="Receptes";
+        var condicio="";
+        var ordre=[{field: 'Nom recepta', direction: 'asc'}];
+        var limit=1;
+        loadReceptes(capa,vista,taula,condicio,ordre,limit);
+    </script>
+    
 </head>
 
 <body>
@@ -178,7 +192,7 @@
 		        <a class="nav-link" href="#">New</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#">Starters</a>
+		        <a class="nav-link" href="#index_test.html">Starters</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="#">Main dishes</a>
@@ -215,6 +229,9 @@
 			<div class="cover-box">
 				<img class="cover-image" alt="Cover" src="assets/f4.jpg">
 			</div>
+			<h1>Destacat</h1>
+	        <div id="featured"></div>
+			
 			<div class="list">
 				<div id="row-1" class="row">
 					<div class="row-item">
