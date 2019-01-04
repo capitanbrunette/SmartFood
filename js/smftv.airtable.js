@@ -4,7 +4,7 @@ var base = new Airtable({apiKey: 'keyL3uol5niAvCvWP'}).base('apps61lsWyWr8NNur')
 
 const Airtable = require('airtable');
 Airtable.configure({
-    apiKey: 'keyL3uol5niAvCvWP'
+    apiKey: 'keyNb4ZbKPKQ59R9K'
 });
 const base = Airtable.base('apps61lsWyWr8NNur');
 
@@ -76,7 +76,7 @@ function existsUser(userName){ //no sé si és la millor manera...
         return records.length;
     });
 
-    console.log("num records: "+num_records);
+    console.log("num records (fora): "+num_records);
     return num_records == 0;
 }
 
