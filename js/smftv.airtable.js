@@ -1,7 +1,17 @@
-var Airtable = require('airtable');
+/*var Airtable = require('airtable');
 var base = new Airtable({apiKey: 'keyL3uol5niAvCvWP'}).base('apps61lsWyWr8NNur');
+*/
+
+const Airtable = require('airtable');
+Airtable.configure({
+    apiKey: 'keyL3uol5niAvCvWP'
+});
+const base = Airtable.base('apps61lsWyWr8NNur');
 
 var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic
+
+console.log("rfexcrmizo "+existsUser("rfexcrmizo"));
+console.log("dfuertes "+existsUser("dfuertes"));
 
 /***
  * string capa --> id de la capa on ha de carregar
@@ -13,8 +23,10 @@ var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic
  */
 var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     $(capa).empty();
-
-    base(taula).select({
+    
+    var t = base(taula);
+    
+    t.select({
         sort: ordre,
         view: vista,
         filterByFormula: condicio,
@@ -46,38 +58,33 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
 
 
 function isUserFav(favedUsers){
-    isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
+    var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
 }
 
-/** PENDENT
 function existsUser(userName){ //no sé si és la millor manera...
-    var exists = false;
-
-    base('Users').select({
-        // Selecting the first 3 records in Grid view:
+    var u = base('Users');
+    var num_records = u.select({
         maxRecords: 1,
         filterByFormula: "FIND(LOWER(\""+userName+"\"),LOWER({usuari}))"
-    }).eachPage(function page(records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
-        records.forEach(function(record) {
-            exists = true;
-            console.log("existeix")
-        });
-        fetchNextPage();
-    
-    }, function done(err) {
-        if (err) { console.error(err); return; }
+    }).firstPage((err, records) => {
+        if(err){
+            console.error(err);
+            return;
+        }
+        console.log("num records (dins): "+records.length);
+        return records.length;
     });
-    
-    return exists;
+
+    console.log("num records: "+num_records);
+    return num_records == 0;
 }
-*/
+
 
 function consola(dades){ //funció per mostrar a la consola el contingut de l'array que li passem. Ho fem servir per debugar fàcilment.
     dades.forEach(function myFunction(item, index) {
         console.log('Retrieved ', "index[" + index + "]: " + item + "<br>");
-      })
+      });
     
 }
 
