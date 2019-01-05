@@ -8,10 +8,12 @@ Airtable.configure({
 });
 const base = Airtable.base('apps61lsWyWr8NNur');
 
-var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic
+var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic //TEMP
 
-console.log("rfexcrmizo "+existsUser("rfexcrmizo"));
-console.log("dfuertes "+existsUser("dfuertes"));
+//console.log("rfexcrmizo "+existsUser("rfexcrmizo")); //TEMP
+//console.log("dfuertes "+existsUser("dfuertes")); //TEMP
+
+getRecepta("recZyEyBJMkrgWo3V"); //TEMP
 
 /***
  * string capa --> id de la capa on ha de carregar
@@ -39,7 +41,7 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             var entradeta =  record.get('Entradeta');
             var foto = record.get('Fotos')[0].thumbnails.large.url;
             var fav = isUserFav(record.get('Users')); //boolean
-            consola([id,nom_recepta,entradeta,foto,fav]);
+            //consola([id,nom_recepta,entradeta,foto,fav]);
 
             //MAQUETACIÓ
             var $receptaInfo = $('<div>');
@@ -56,13 +58,59 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     });
 };
 
+function getRecepta(idRecepta){
+    var r = base('Receptes');
+	r.find(idRecepta, function(err, record) {
+        if (err) { console.error(err); return; }
 
+        var nom_recepta = record.get("Nom recepta");
+        var comensals = record.get("Comensals");
+        var temps_coccio = record.get("Temps de cocció (Minuts)");
+        var temps = record.get("Temps");
+        var temps_preparacio = record.get("Temps de preparació (Minuts)");
+        var entradeta = record.get("Entradeta");
+        var categoria = record.get("Categoria");
+        var visites = record.get("Visites"); //TODO: visites++
+        var created_time = record.get("Creat");
+        var last_visit = record.get("Última consulta");
+        var featured = record.get("Featured");
+        var featuredBy = record.get("FavoritedBy");
+
+        var steps = record.get("Steps");
+
+        getSteps(nom_recepta);
+
+
+        //consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,featuredBy]);
+        
+        //MAQUETACIÓ AQUÍ
+    });
+}
+
+function getSteps(nom_recepta){
+    var s = base("Steps");
+    var steps = [];
+    s.select({
+        sort: [{field: "Ordre", direction: "asc"}],
+        filterByFormula: "{Recepta} = '"+nom_recepta+"'"
+    }).firstPage(function(err, records) {
+        if (err) { console.error(err); return; }
+        records.forEach(function(record) {
+            steps.push(record.get('Text'));
+            //console.log('Retrieved', record.get('Text'));
+        });
+        consola(steps);
+        return steps;
+    });
+    consola(steps);
+    
+}
 function isUserFav(favedUsers){
     var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
 }
 
-function existsUser(userName){ //no sé si és la millor manera...
+function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FUNCIONA)
     var u = base('Users');
     var num_records = u.select({
         maxRecords: 1,
@@ -80,7 +128,6 @@ function existsUser(userName){ //no sé si és la millor manera...
     return num_records == 0;
 }
 
-
 function consola(dades){ //funció per mostrar a la consola el contingut de l'array que li passem. Ho fem servir per debugar fàcilment.
     dades.forEach(function myFunction(item, index) {
         console.log('Retrieved ', "index[" + index + "]: " + item + "<br>");
@@ -93,11 +140,11 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
 - funcions:
 * OK loadReceptes amb fotos
 * OK isFav
-* getRecepta
+* (COMENÇAT) getRecepta
 * cerca
 * blog
 * getAvatars
-* sign in
+* sign in 
 * sign up
-* existsUser
+* (COMENÇAT) existsUser
 */
