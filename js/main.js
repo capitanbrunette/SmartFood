@@ -43,8 +43,6 @@ function keyListenerMaster(e) {
 
 function keyListenerSignIn(e) {
 	var target = document.getElementsByClassName("modal fade")[i].getElementsByClassName("sign-input");
-	console.log(target);
-	console.log(document.getElementsByClassName("modal fade")[0].getElementsByClassName("sign-input")[0]);
 	if(e.keyCode === KEY_UP){
 		console.log(target[j]);
 		target[j].classList.remove("selected");
@@ -53,7 +51,6 @@ function keyListenerSignIn(e) {
     }
 
     if(e.keyCode === KEY_DOWN){
-    	console.log(target[j]);
 		target[j].classList.remove("selected");
 		if(j >= 0 && j < target.length-1){ j++;}
 		target[j].classList.add("selected");
@@ -87,7 +84,6 @@ function keyListenerSignIn(e) {
 
 function keyListenerHome(e){
 	console.log("FUNCIO HOMEKEY");
-	console.log(i);
 	var target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
 
 	if(e.keyCode === KEY_UP){
@@ -143,9 +139,7 @@ function signIn(){
 	  $('.modal-backdrop').remove();
 	  document.removeEventListener("keydown", keyListenerSignIn, false);
 	  startHome();
-
 	  //CAL REGISTRAR L'USUARI I FER COMPROVACIONS DE REGISTRE
-	  console.log(tizen.tvinputdevice.getSupportedKeys());
 };
 
 function loadHomeInfo(){
@@ -165,9 +159,5 @@ function startHome(){
 	document.addEventListener("keydown", keyListenerHome, false);
 	loadHomeInfo();
 	setTimeout(reloadCoverImage, 10000);
-    
-    console.log("s'executa start home");
-    console.log(document.getElementsByClassName("row")[0].getElementsByClassName("item-image"));
-
 
 }

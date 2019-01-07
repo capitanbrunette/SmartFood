@@ -31,6 +31,7 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     $(capa).empty();
     
     var r = base(taula);
+    var first = 1;
     
     r.select({
         sort: ordre,
@@ -48,15 +49,21 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             //consola([id,nom_recepta,entradeta,foto,fav]);
 
             //MAQUETACIÓ
+            var $imatge = $('<img>').attr('class', "item-image");
+            $imatge.attr("src", foto);
             var $receptaInfo = $('<div>');
-            $receptaInfo.attr('class', "test");
-            $receptaInfo.attr('id-recepta', id);
-            $receptaInfo.append($('<h3>').text(nom_recepta));
+            $receptaInfo.attr('class', "row-item");
+            $receptaInfo.append($imatge);
     
             $(capa).append($receptaInfo);
+            if(first){
+            	$('.cover-image').attr("src",foto);
+            	first = 0;
+            }
         });
 
         fetchNextPage();
+        document.getElementsByClassName("row")[0].getElementsByClassName("row-item")[0].classList.add("selected");
     }, function done(error) {
         console.log(error);
     });
@@ -251,7 +258,7 @@ function addUser(){
 
 }
 
-function signIn(){
+function signInCheck(){
     
 }
 
