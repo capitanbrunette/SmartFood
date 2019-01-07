@@ -23,6 +23,8 @@
     
     
     <script type="text/javascript">
+    	console.log(tizen.tvinputdevice.getSupportedKeys());
+    	
         var capa="#featured";
         var vista="featured";
         var taula="Receptes";
@@ -39,9 +41,9 @@
 	<section id="master"> 
 		<img src="assets/f1.jpg" alt="Burguer" height="1080" width="1920">
 	
-		<div id="sign-row" class="row">
-		    <button type="button" id="sign-btns" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ModalSingIn">Sign in</button>
-			<button type="button" id="sign-btns" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ModalRegister">Sign up</button>
+		<div id="sign-row">
+		    <button type="button" class="btn btn-primary sign-btns selected" data-toggle="modal" data-target="#ModalSingIn">Sign in</button>
+			<button type="button" class="btn btn-primary sign-btns" data-toggle="modal" data-target="#ModalRegister">Sign up</button>
 		</div>
 	
 		
@@ -68,7 +70,7 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control"  id="user_name" name="user_name" placeholder="Username"  type="text" required>
+	                                    <input class="form-control sign-input selected"  id="user_name" name="user_name" placeholder="Username"  type="text" required>
 	                                </div>
 	                            </div>
 	
@@ -81,7 +83,7 @@
 	                                            <span class="oi oi-key" title="icon key" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control" id="user_password" name="user_password" placeholder="Password"  type="password" required>
+	                                    <input class="form-control sign-input" id="user_password" name="user_password" placeholder="Password"  type="password" required>
 	                                </div>
 	
 	                            </div>
@@ -89,12 +91,13 @@
 	                    </fieldset>
 	                    </form>
 	                    <div class="modal-footer">
-	                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ModalRegister" data-dismiss="modal">Register</button>
-	                        <button onclick="signIn()" class="btn btn-primary" >Sign in</button>
+	                    	<button onclick="signIn()" class="btn btn-primary sign-input" >Sign in</button>
+	                        <button type="button" class="btn btn-secondary sign-input" data-toggle="modal" data-target="#ModalRegister" data-dismiss="modal">Close</button>
 	                    </div>
 	                </div>
 	            </div>
 	    </div>
+
 
 
 	    <!-- Modal Sign Up -->
@@ -121,7 +124,7 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input  id="first_name" name="first_name" placeholder="Full Name" class="form-control"  type="text">
+	                                    <input  id="first_name" name="first_name" placeholder="Full Name" class="form-control sign-input selected"  type="text">
 	                                </div>
 	                            </div>
 		
@@ -134,7 +137,7 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control"  id="username" name="username" placeholder="Username"  type="text">
+	                                    <input class="form-control sign-input"  id="username" name="username" placeholder="Username"  type="text">
 	                                </div>
 	                            </div>
 	
@@ -147,7 +150,7 @@
 	                                            <span class="oi oi-key" title="icon key" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control"  name="password" id="password" placeholder="Password"  type="password">
+	                                    <input class="form-control sign-input"  name="password" id="password" placeholder="Password"  type="password">
 	                                </div>
 	                            </div>
 	
@@ -160,14 +163,14 @@
 	                                            <span class="oi oi-envelope-closed" title="icon envelope-closed" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control" id="email" name="email" placeholder="email@example.com"  type="email">
+	                                    <input class="form-control sign-input" id="email" name="email" placeholder="email@example.com"  type="email">
 	                                </div>
 	                            </div>
 	
 	                        </fieldset>
 	                        <div class="modal-footer">
-	                            <button type="button" data-toggle="modal" data-target="#ModalSingIn" data-dismiss="modal" class="btn btn-secondary">Sing in</button>
-	                            <button type="submit" class="btn btn-primary">Register</button>
+	                        	<button type="submit" class="btn btn-primary sign-input">Register</button>
+	                            <button type="button" class="btn btn-secondary sign-input">Close</button>
 	                        </div>
 	                    </form>
 	                </div>
@@ -176,7 +179,7 @@
 	    </div>
 	</section>
 	
-	
+	<div id="backdrop" class="modal-backdrop fade show"  style="display:none;"></div>
 	
 	<section id="home"  style="display:none;">
 	
@@ -229,64 +232,31 @@
 			<div class="cover-box">
 				<img class="cover-image" alt="Cover" src="assets/f4.jpg">
 			</div>
-			<h1>Destacat</h1>
-	        <div id="featured"></div>
 			
-			<div class="list">
-				<div id="row-1" class="row">
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
+			<div class="list" id="container">
+				<div class="row-container">
+					<h1 class="row-title">Featured</h1>
+					<div id="row-01" class="row">		
+						<!--
+						<div class="row-item">
+							<img class="item-image" alt="item" src="assets/f3.jpg">
+						</div>
+						 -->
 					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" height="90" width="160" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" height="90" width="160" src="assets/f3.jpg">
-					</div>
-
 				</div>
-				<div class="row">
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
+				
+				<div class="row-container">
+					<h1 class="row-title">Favourite</h1>
+					<div id="row-02" class="row ">
 					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-	
 				</div>
-				<div class="row">
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
+				
+				<div class="row-container">
+					<h1 class="row-title">Popular</h1>
+					<div id="row-03" class="row">
 					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-	
-				</div>
-				<div class="row">
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-					<div class="row-item">
-						<img class="item-image" alt="item" src="assets/f3.jpg">
-					</div>
-	
 				</div>
 			</div>
-		
-			
 		</div>
 	</section>
 </body>

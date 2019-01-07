@@ -5,5 +5,7 @@
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="assets/logoSF-01.png"/>
     <name>BasicUI</name>
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.audio"/>
     <tizen:profile name="tv"/>
 </widget>

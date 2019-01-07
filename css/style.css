@@ -23,7 +23,7 @@ nav{
     background: none;
 }
 
-#sign-btns{
+.sign-btns{
 	flex: 40%;
 	width:300px;
 	margin-left: 50px;
@@ -41,24 +41,33 @@ nav{
     position: relative;
     max-height:485px;
     overflow: hidden;
+    padding: 5px 15px;
 }
 
 .row-item {
     background: #D3D3D3 none repeat scroll 0% 0%;
     border-radius: 10px;
-    margin: 10px 10px 0px;
+    margin: 0px 10px;
     position: relative;
     flex: 18%;
     overflow: hidden;
+    height: 100%;
 }
 
-.row {
+.row{
+	display: flex;
+	flex-direction: row;
+	overflow: hidden;
+	max-width:1920px;
+	height: 258px;
+}
+
+.row-container {
     background: #FFF none repeat scroll 0% 0%;
     border-radius: 10px;
     margin: 10px 10px 0px;
     position: relative;
     max-width:1920px;
-    flex-direction: row;
     flex: 25%;
     overflow: hidden;
 }
@@ -66,16 +75,30 @@ nav{
 
 .cover-box{
 	max-height: 500px;
+	height: 500px;
 	width: 100%;
 	overflow: hidden;
 }
 
 .cover-image{
 	overflow: hidden;
+	width: 100%;
 }
 
 .item-image{
 	width:100%;
+}
+
+.selected{
+	border: 5px solid orange;
+}
+
+h1{
+	font-weight: bold;
+}
+
+.container-fluid{
+	padding: 0px;
 }
 
 

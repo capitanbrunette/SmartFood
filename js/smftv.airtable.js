@@ -27,6 +27,7 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     $(capa).empty();
     
     var t = base(taula);
+	var first = 1;
     
     t.select({
         sort: ordre,
@@ -44,15 +45,22 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             //consola([id,nom_recepta,entradeta,foto,fav]);
 
             //MAQUETACIÓ
+            var $imatge = $('<img>').attr('class', "item-image");
+            $imatge.attr("src", foto);
             var $receptaInfo = $('<div>');
-            $receptaInfo.attr('class', "test");
-            $receptaInfo.attr('id-recepta', id);
-            $receptaInfo.append($('<h3>').text(nom_recepta));
+            $receptaInfo.attr('class', "row-item");
+            $receptaInfo.append($imatge);
     
             $(capa).append($receptaInfo);
+            if(first){
+            	$('.cover-image').attr("src",foto);
+            	first = 0;
+            }
         });
-
+        
         fetchNextPage();
+        document.getElementsByClassName("row")[0].getElementsByClassName("row-item")[0].classList.add("selected");
+        
     }, function done(error) {
         console.log(error);
     });
@@ -100,11 +108,12 @@ function getSteps(nom_recepta){
             //console.log('Retrieved', record.get('Text'));
         });
         consola(steps);
-        return steps;
+        //return steps;
     });
     consola(steps);
-    
 }
+
+
 function isUserFav(favedUsers){
     var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
