@@ -9,22 +9,25 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	 
+
 	<link rel="stylesheet" href="css/open-iconic-bootstrap.css">
-	
-	<link rel="stylesheet" type="text/css" href="css/style.css"/> 
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="css/jQKeyboard.css"/>
+
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/airtable.browser.js"></script>
     <script type="text/javascript" src="js/smftv.airtable.js"></script>
-    
-    
+		<script type="text/javascript" src="js/jQKeyboard.js"></script>
+
+
+
     <script type="text/javascript">
     	console.log(tizen.tvinputdevice.getSupportedKeys());
-    	
+
         var capa="#featured";
         var vista="featured";
         var taula="Receptes";
@@ -33,20 +36,20 @@
         var limit=1;
         loadReceptes(capa,vista,taula,condicio,ordre,limit);
     </script>
-    
+
 </head>
 
 <body>
 
-	<section id="master"> 
+	<section id="master">
 		<img src="assets/f1.jpg" alt="Burguer" height="1080" width="1920">
-	
+
 		<div id="sign-row">
 		    <button type="button" class="btn btn-primary sign-btns selected" data-toggle="modal" data-target="#ModalSingIn">Sign in</button>
 			<button type="button" class="btn btn-primary sign-btns" data-toggle="modal" data-target="#ModalRegister">Sign up</button>
 		</div>
-	
-		
+
+
 	    <!-- Modal Sign In -->
 	    <div class="modal fade" id="ModalSingIn" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	            <div class="modal-dialog modal-dialog-centered" role="document">
@@ -70,10 +73,10 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control sign-input selected"  id="user_name" name="user_name" placeholder="Username"  type="text" required>
+	                                    <input class="form-control sign-input jQKeyboard selected"  id="user_name" name="user_name" placeholder="Username"  type="text" required>
 	                                </div>
 	                            </div>
-	
+
 	                            <!-- Password input-->
 	                            <div class="form-group">
 	                                <label class="control-label">Password</label>
@@ -83,16 +86,16 @@
 	                                            <span class="oi oi-key" title="icon key" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control sign-input" id="user_password" name="user_password" placeholder="Password"  type="password" required>
+	                                    <input class="form-control sign-input  jQKeyboard" id="user_password" name="user_password" placeholder="Password"  type="password" required>
 	                                </div>
-	
+
 	                            </div>
 	                        </div>
 	                    </fieldset>
 	                    </form>
 	                    <div class="modal-footer">
 	                    	<button onclick="signIn()" class="btn btn-primary sign-input" >Sign in</button>
-	                        <button type="button" class="btn btn-secondary sign-input" data-toggle="modal" data-target="#ModalRegister" data-dismiss="modal">Close</button>
+	                        <button type="button" class="btn btn-secondary sign-input  jQKeyboard" data-toggle="modal" data-target="#ModalRegister" data-dismiss="modal">Close</button>
 	                    </div>
 	                </div>
 	            </div>
@@ -105,7 +108,7 @@
 	        <div class="modal-dialog modal-dialog-centered" role="document">
 	            <div class="modal-content">
 	                <div class="modal-header">
-	                    <h5 class="modal-title" id="exampleModalLongTitle">Register</h5>
+	                    <h5 class="modal-title">Register</h5>
 	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
@@ -124,10 +127,10 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input  id="first_name" name="first_name" placeholder="Full Name" class="form-control sign-input selected"  type="text">
+	                                    <input  id="first_name" name="first_name" placeholder="Full Name" class="form-control sign-input  jQKeyboard selected"  type="text">
 	                                </div>
 	                            </div>
-		
+
 	                            <!-- Username input-->
 	                            <div class="form-group">
 	                                <label class="control-label">Username</label>
@@ -137,10 +140,10 @@
 	                                            <span class="oi oi-person" title="icon person" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control sign-input"  id="username" name="username" placeholder="Username"  type="text">
+	                                    <input class="form-control sign-input  jQKeyboard"  id="username" name="username" placeholder="Username"  type="text">
 	                                </div>
 	                            </div>
-	
+
 	                            <!-- Password input-->
 	                            <div class="form-group">
 	                                <label class="control-label">Password</label>
@@ -150,10 +153,10 @@
 	                                            <span class="oi oi-key" title="icon key" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control sign-input"  name="password" id="password" placeholder="Password"  type="password">
+	                                    <input class="form-control sign-input  jQKeyboard"  name="password" id="password" placeholder="Password"  type="password">
 	                                </div>
 	                            </div>
-	
+
 	                            <!-- Email input-->
 	                            <div class="form-group">
 	                                <label class="control-label">E-Mail</label>
@@ -163,10 +166,10 @@
 	                                            <span class="oi oi-envelope-closed" title="icon envelope-closed" aria-hidden="true"></span>
 	                                        </div>
 	                                    </div>
-	                                    <input class="form-control sign-input" id="email" name="email" placeholder="email@example.com"  type="email">
+	                                    <input class="form-control sign-input  jQKeyboard" id="email" name="email" placeholder="email@example.com"  type="email">
 	                                </div>
 	                            </div>
-	
+
 	                        </fieldset>
 	                        <div class="modal-footer">
 	                        	<button type="submit" class="btn btn-primary sign-input">Register</button>
@@ -178,11 +181,11 @@
 	        </div>
 	    </div>
 	</section>
-	
+
 	<div id="backdrop" class="modal-backdrop fade show"  style="display:none;"></div>
-	
+
 	<section id="home"  style="display:none;">
-	
+
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		  <a class="navbar-brand" href="#">SmartFood</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -192,23 +195,20 @@
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
 		      <li class="nav-item active">
-		        <a class="nav-link" href="#">New</a>
+		        <a class="nav-link" href="#"><i class="fa fa-home" style="font-size:48px;color:white"></i></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#index_test.html">Starters</a>
+		        <a class="nav-link" href="#"><i class="fa fa-bolt" style="font-size:48px;color:white"></i></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#">Main dishes</a>
+		        <a class="nav-link" href="#"><i class="fa fa-newspaper-o" style="font-size:48px;color:white"></i></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#">Desserts</a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#"><i class="fa fa-heart" style="font-size:48px;color:red"></i></a>
+		        <a class="nav-link" href="#"><i class="fa fa-heart" style="font-size:45px;color:white"></i></a>
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0">
-		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		      <input class="form-control mr-sm-2  jQKeyboard" type="search" placeholder="Search" aria-label="Search">
 		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
 		    </form>
 		    <ul class="navbar-nav">
@@ -224,19 +224,19 @@
 		        </div>
 		     </li>
 		    </ul>
-			
+
 		  </div>
 		</nav>
-		
-		<div class="container-fluid">
+
+		<div id="main" class="container-fluid" style="display:none;">
 			<div class="cover-box">
 				<img class="cover-image" alt="Cover" src="assets/f4.jpg">
 			</div>
-			
+
 			<div class="list" id="container">
 				<div class="row-container">
 					<h1 class="row-title">Featured</h1>
-					<div id="row-01" class="row">		
+					<div id="row-01" class="row">
 						<!--
 						<div class="row-item">
 							<img class="item-image" alt="item" src="assets/f3.jpg">
@@ -244,13 +244,13 @@
 						 -->
 					</div>
 				</div>
-				
+
 				<div class="row-container">
 					<h1 class="row-title">Favourite</h1>
 					<div id="row-02" class="row ">
 					</div>
 				</div>
-				
+
 				<div class="row-container">
 					<h1 class="row-title">Popular</h1>
 					<div id="row-03" class="row">
@@ -258,7 +258,48 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="recipe" class="container-fluid">
+			<div class="general-container">
+				<div class="left-container">
+					<div class="info-row" style="background-color: #ffcc99">
+						<div class="info-item" style="background-color: #994d00"></div>
+						<div class="info-item" style="background-color: #994d00"></div>
+						<div class="info-item" style="background-color: #994d00"></div>
+					</div>
+					<div class="central-image" style="background-color: #ffcc66"></div>
+					<div class="thumbnails-row" style="background-color: #b3e0ff">
+						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+					</div>
+				</div>
+				
+				<div class="right-container">
+					<h1 class="page-title">Titol de la repta</h1>
+					<div class="button-row" style="background-color: #ace600">
+						<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						  <label class="btn btn-secondary group-button active">
+						    <input type="radio" name="options" id="option1" autocomplete="off" checked> Ingredients
+						  </label>
+						  <label class="btn btn-secondary group-button">
+						    <input type="radio" name="options" id="option2" autocomplete="off"> Steps List
+						  </label>
+						 </div>
+					</div>
+					<div class="info-container" style="background-color: #ff9999">
+						<div class="step" style="background-color: #55ff55">1. Aquest serà el primer pas</div>
+						<div class="step" style="background-color: #55ff55">2. Aquet el segon per omplir</div>
+						<div class="step" style="background-color: #55ff55">3. I anem amb el tercer que és una mica és llarg de lo normal per comprovar com quedari l'escrit si es tracta d'alguna explicació molt prolongada que calgui llegir detingudament</div>
+					</div>
+				</div>
+			
+			</div>
+		
+		</div>
 	</section>
+	
 </body>
 </html>
-
