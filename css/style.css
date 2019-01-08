@@ -101,6 +101,99 @@ h1{
 	padding: 0px;
 }
 
+/*.keyboard-row{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.keyboard-key{
+	flex: 15%;
+	background-color: #484848;
+	color: white;
+	margin: 5px;
+}
+
+.keyboard-conrainer{
+	max-height: 700px;
+	max-width: 400px;
+	top: 30%;
+	left: 10%;
+	background-color: #282828;
+
+}*/
+
+.modal{
+	bottom: 500px;
+}
+
+.nav-item{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.general-container{
+	display: flex;
+	flex-direction: row;
+}
+
+.left-container{
+	/*background-color: #484848;*/
+	height: 980px;
+	width: 1300px;
+	display:flex;
+	flex-direction:column;
+}
+
+
+.info-row{
+	flex: 10%;
+	margin: 10px;
+}
+
+.central-image{
+	margin: 10px;
+	flex: 65%;
+}
+
+.thumbnails-row{
+	display: flex;
+	flex: 25%;
+	margin: 10px;
+	flex-direction: row;
+}
+
+.thumbnail{
+	margin: 10px;
+}
+
+.right-container{
+	height: 980px;
+	width: 620px;
+}
+
+.button-row{
+	height: 150px;
+	width: 100%;
+}
+
+.info-container{
+	height: 750px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.step{
+	margin: 5px 5px;
+	flex: 10%;
+	max-height: 80px;
+}
+
+.group-button {
+	font-size: 40px;
+	padding: 10px 55px;
+}
 
 
 
