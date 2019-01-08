@@ -8,14 +8,13 @@ Airtable.configure({
 });
 const base = Airtable.base('apps61lsWyWr8NNur');
 
+
 //PROVES (TEMP)
 var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic //TEMP
 
-console.log("rfexcrmizo "+existsUser("rfermizo")); //TEMP
-console.log("dfuertes "+existsUser("dfuertes")); //TEMP
-
 getRecepta("recZyEyBJMkrgWo3V"); //TEMP
 cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
+
 
 //FUNCIONS DE CONSULTA
 
@@ -86,17 +85,17 @@ function getRecepta(idRecepta,capa){
         var last_visit = record.get("Última consulta");
         var featured = record.get("Featured");
         var favoritedBy = record.get("FavoritedBy");
-        var tags = record.get("Tags");
         var steps = record.get("Steps");
         var fotos = getMediaFotosR(record.get('Fotos'),"capa");
 
         getStepsR(nom_recepta,"capa");
         getMediaVideosR(nom_recepta,"capa");
         getIngredientsR(nom_recepta,"capa");
+        getTags(nom_recepta,"capa");
         //setFav("recZyEyBJMkrgWo3V",nom_recepta);
         
         incrementaVisitaR(idRecepta, visites);
-        consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
+        //consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
         
         //MAQUETACIÓ AQUÍ
 
@@ -146,7 +145,7 @@ function getMediaVideosR(nom_recepta,capa){
             
             //MAQUETACIÓ AQUÍ
 
-            console.log('Retrieved VIDEO:', url_video);
+            //console.log('Retrieved VIDEO:', url_video);
         });
     });
 }
@@ -163,7 +162,25 @@ function getIngredientsR(nom_recepta,capa){
             
             //MAQUETACIÓ AQUÍ
 
-            console.log('Retrieved ING:', ingredient);
+            //console.log('Retrieved ING:', ingredient);
+        });
+    });
+}
+
+function getTags(nom_recepta,capa){
+    $(capa).empty();
+
+    var t = base("Tags");
+    t.select({
+        filterByFormula: "FIND(LOWER(\""+nom_recepta+"\"),LOWER({Receptes}))"
+    }).firstPage(function(err, records) {
+        if (err) { console.error(err); return; }
+        records.forEach(function(record) {
+            var tag = record.get('Name');
+            
+            //MAQUETACIÓ AQUÍ
+
+            console.log('Retrieved TAG:', tag);
         });
     });
 }
@@ -172,6 +189,13 @@ function isUserFav(favedUsers){
     var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
 }
+
+var existeixUsuari=false; // variable global que es fa servir a existsUser per comprovar si l'usuari ja existeix. No hi ha hagut més remei que fer-ho amb variable global.
+
+existsUser("rfesrmizo")
+console.log("rfesrmizo "+existeixUsuari); //TEMP
+existsUser("dfuertes")
+console.log("dfuertes "+existeixUsuari); //TEMP
 
 function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FUNCIONA)
     var u = base('Users');
@@ -183,11 +207,12 @@ function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FU
             console.error(err);
             return;
         }
-        //VARIABLE GLOBAL
+        //VARIABLE GLOBAL (NI AIXÍ!)
+        //existeixUsuari = records.length!=0;
+        existeixUsuari = true;
+        console.log("existeix? "+userName+" "+existeixUsuari);
     });
-    
-    //console.log("num records (fora): "+records.length);
-    //return records.length == 0;
+    console.log("existeix? (fora) "+userName+" "+existeixUsuari);
 }
 
 
@@ -254,12 +279,13 @@ function getFavsU(idUser){
 }
 */
 
-function addUser(){
+function addUser(nom,username,password,email){
+    //comprova si l'usuari existeix. Retorna true o false.
 
 }
 
 function signInCheck(){
-    
+    //comprova si l'usuari existeix. Retorna true o false amb variable global.
 }
 
 //ALTRES FUNCIONS AUXILIARS

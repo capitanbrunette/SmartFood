@@ -2,9 +2,10 @@
 <html>
     <head>
         <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
-        <script src="airtable.browser.js"></script>
-        <script src="smftv.airtable.js"></script>
-
+        <script src="js/jqcloud.min.js"></script>
+        <link rel="stylesheet" href="css/jqcloud.min.css">
+        <script src="js/airtable.browser.js"></script>
+        <script src="js/smftv.airtable.js"></script>
     </head>
     <body>
         <h1>Destacat</h1>
@@ -18,14 +19,27 @@
 
         <h1>Últimes consultes</h1>
         <div id="lastVisited"></div>
+
+        <h1>Primers (TOP 5)</h1>
+        <div id="primersNew"></div>
+    
+        <h1>Segons (TOP 5)</h1>
+        <div id="segonsNew"></div>
+    
+        <h1>Postres (TOP 5)</h1>
+        <div id="postresNew"></div>
+
+        <h1>TAG CLOUD</h1>
+        <div id="tagCloud" style="height: 500px; width: 500px;"></div>
+
     </body>
 
 
     <script>
 
-        var loggedUserName = "dfuertes";
+        
 
-
+        //RECEPTES DESTACADES (POTSER NO HO FEM SERVIR)
         var capa="#featured";
         var vista="featured";
         var taula="Receptes";
@@ -34,6 +48,8 @@
         var limit=1;
         loadReceptes(capa,vista,taula,condicio,ordre,limit);
 
+        //RECEPTES FAVORITES DE L'USUARI
+        var loggedUserName = "dfuertes"; //aquí cal posar el username de l'usuari que estigui guardat a la sessió
         var capa="#favorited";
         var vista="favorited";
         var taula="Receptes";
@@ -41,18 +57,85 @@
         var ordre=[{field: 'Nom recepta', direction: 'asc'}];
         var limit=100;
         loadReceptes(capa,vista,taula,condicio,ordre,limit);
-//prova
+
+        //POPULARS (TOP 5)
         var capa="#popular";
         var vista="popular";
         var taula="Receptes";
         var condicio="";
         var ordre=[
             {field:'Visites', direction:'desc'},
-            {field: 'Nom recepta', direction: 'desc'}
+            {field: 'Nom recepta', direction: 'asc'}
         ]
-        var limit=3;
+        var limit=5;
         loadReceptes(capa,vista,taula,condicio,ordre,limit);
 
+        //LES ÚLTIMES RECEPTES CONSULTADES (TOP 5)
+        var capa="#lastVisited";
+        var vista="lastVisited";
+        var taula="Receptes";
+        var condicio="";
+        var ordre=[
+            {field:'lastVisited', direction:'desc'},
+            {field: 'Nom recepta', direction: 'asc'}
+        ]
+        var limit=5;
+        loadReceptes(capa,vista,taula,condicio,ordre,limit);
 
+        //PRIMERS ORDENATS PER NOVETATS (TOP 5)
+        var capa="#primersNew";
+        var vista="Primers";
+        var taula="Receptes";
+        var condicio="";
+        var ordre=[
+            {field:'Creat', direction:'desc'},
+            {field: 'Nom recepta', direction: 'asc'}
+        ]
+        var limit=5;
+        loadReceptes(capa,vista,taula,condicio,ordre,limit);       
+
+        //SEGONS ORDENATS PER NOVETATS (TOP 5)
+        var capa="#segonsNew";
+        var vista="Segons";
+        var taula="Receptes";
+        var condicio="";
+        var ordre=[
+            {field:'Creat', direction:'desc'},
+            {field: 'Nom recepta', direction: 'asc'}
+        ]
+        var limit=5;
+        loadReceptes(capa,vista,taula,condicio,ordre,limit);       
+
+        //POSTRES ORDENATS PER NOVETATS (TOP 5)
+        var capa="#postresNew";
+        var vista="Postres";
+        var taula="Receptes";
+        var condicio="";
+        var ordre=[
+            {field:'Creat', direction:'desc'},
+            {field: 'Nom recepta', direction: 'asc'}
+        ]
+        var limit=5;
+        loadReceptes(capa,vista,taula,condicio,ordre,limit);       
+ 
+ var words = [];
+ var t = base("Tags");
+    t.select({
+        view: "Tots"
+    }).firstPage(function(err, records) {
+        if (err) { console.error(err); return; }
+
+        records.forEach(function(record) {
+            var tagName = record.get('Name');
+            var tagWeight = record.get('Weight');
+            
+            //MAQUETACIÓ AQUÍ
+           words.push({text: tagName, weight: tagWeight});     
+        });
+        $('#tagCloud').jQCloud(words);
+            console.log('Retrieved VIDEO:', words);
+    });
+
+ 
     </script>
 </html>

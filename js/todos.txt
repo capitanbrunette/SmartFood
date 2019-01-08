@@ -1,0 +1,11 @@
+- OK Favorits usuari
+- OK Populars
+- OK Últimes consultes
+- OK Primers ordenat per novetats i només 5
+- OK Segons "
+- OK Postres "
+
+- blog jquery
+- cerca per nom recepta i per tags
+- addUser
+- signInCheck
