@@ -6,7 +6,7 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 
 //PROVES (TEMP)
-
+var loggedUser="recXIH2KiEu6lOui1";
 /*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
 cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
 
