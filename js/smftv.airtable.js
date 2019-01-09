@@ -250,7 +250,13 @@ function cerca(paraules,capa){
     }
     filtre = filtre + ")";
 
-    var r = base("Receptes");
+    var ordre=[{field: 'Nom recepta', direction: 'asc'}];
+
+    console.log(filtre);
+
+    //loadReceptes(capa, "Resum", "Receptes", filtre, ordre, 5);
+
+    /*var r = base("Receptes");
     r.select({
         filterByFormula: filtre
     }).firstPage(function(err, records) {
@@ -258,10 +264,12 @@ function cerca(paraules,capa){
         records.forEach(function(record) {
             var pas = record.get('Text');
 
+            console.log(record);
+
             //MAQUETACIÓ AQUÍ
 
         });
-    });
+    });*/
 }
 
 //FUNCIONS D'ACTUALITZACIÓ
@@ -342,3 +350,26 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
       });
 
 }
+<<<<<<< HEAD
+=======
+
+
+var prova = ["aaa","bbb","ccc"]; // An array with some objects
+
+function callbackClosure(i, callback) {
+  return function() {
+    return callback(i);
+  }
+}
+
+/*
+for( var i = 0; i < prova.length; ++i )
+{
+  API.doSthWithCallbacks( callbackClosure( i, function(i) {
+    prova[i] = 42+i;
+  }) );
+}
+
+consola(prova);
+*/
+>>>>>>> branch 'master' of https://github.com/capitanbrunette/SmartFood.git
