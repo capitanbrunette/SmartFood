@@ -350,26 +350,3 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
       });
 
 }
-<<<<<<< HEAD
-=======
-
-
-var prova = ["aaa","bbb","ccc"]; // An array with some objects
-
-function callbackClosure(i, callback) {
-  return function() {
-    return callback(i);
-  }
-}
-
-/*
-for( var i = 0; i < prova.length; ++i )
-{
-  API.doSthWithCallbacks( callbackClosure( i, function(i) {
-    prova[i] = 42+i;
-  }) );
-}
-
-consola(prova);
-*/
->>>>>>> branch 'master' of https://github.com/capitanbrunette/SmartFood.git
