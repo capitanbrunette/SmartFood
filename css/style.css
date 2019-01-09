@@ -47,11 +47,12 @@ nav{
 .row-item {
     background: #D3D3D3 none repeat scroll 0% 0%;
     border-radius: 10px;
-    margin: 0px 10px;
-    position: relative;
-    flex: 18%;
-    overflow: hidden;
-    height: 100%;
+    margin: 0px 5px;
+    /*position: relative;*/
+    width: 350px;
+    /*overflow: hidden;*/
+    max-height: 288px;
+    height: 258px;
 }
 
 .row{
@@ -59,7 +60,7 @@ nav{
 	flex-direction: row;
 	overflow: hidden;
 	max-width:1920px;
-	height: 258px;
+	max-height: 258px;
 }
 
 .row-container {
@@ -87,6 +88,8 @@ nav{
 
 .item-image{
 	width:100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .selected{
@@ -149,22 +152,29 @@ h1{
 .info-row{
 	flex: 10%;
 	margin: 10px;
+	display: flex;
+	flex-direction: row;
+	padding-top: 50px;
+}
+
+.info-item{
+	margin-left: 40px;
+}
+
+.detail{
+	margin-left: 10px;
+	font-size: 25px;
+}
+
+.badge{
+	vertical-align: super;
+	font-size: 25px;
 }
 
 .central-image{
-	margin: 10px;
+	margin-right: 10px;
 	flex: 65%;
-}
-
-.thumbnails-row{
-	display: flex;
-	flex: 25%;
-	margin: 10px;
-	flex-direction: row;
-}
-
-.thumbnail{
-	margin: 10px;
+    overflow: hidden;
 }
 
 .right-container{
@@ -173,8 +183,9 @@ h1{
 }
 
 .button-row{
-	height: 150px;
+	height: 100px;
 	width: 100%;
+	padding: 0px 10px;
 }
 
 .info-container{
@@ -185,9 +196,8 @@ h1{
 }
 
 .step{
-	margin: 5px 5px;
-	flex: 10%;
-	max-height: 80px;
+	margin: 5px 30px;
+	font-size: 30px;
 }
 
 .group-button {
@@ -195,11 +205,189 @@ h1{
 	padding: 10px 55px;
 }
 
+.page-title{
+	margin: 32px;
+	font-size: 50px;
+}
+
+.flex-container {
+  list-style: none;
+  display: flex;
+  background-color: #e8eaf6;
+  width: 1290px;
+  overflow: hidden;
+  padding: 12px;
+  flex: 25%;
+}
+.flex-item {
+  background-color: #c5cae9;
+  width: 300px;
+  height: 220px;
+  max-width: 300px;
+  max-height: 220px;
+  flex-shrink: 0;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-item.flex-item:not(:last-of-type) {
+  margin-right: 12px;
+}
+
+.thumbnail{
+    width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+ul{
+	margin: 0px;
+}
+
+.focus-image{
+	width: 100%;
+	overflow: hidden;
+    transform: translate(0%, -15%);
+}
+
+
+/************* NETFLIX ROW PROVA******* */
+
+/*$duration = 450ms;
+$tileWidth = 250px;
+$tileHeight = ($tileWidth / (16/9));
+$iconSize = 50px;
+$growFactor = 1.5 // 1.5 times the original size;
+
+$moveLeft = -($tileWidth * ($growFactor - 1) / 2);
+$moveRight = $tileWidth * ($growFactor - 1);*/
 
 
 
 
+/*.row{
+    overflow: scroll;
+    width: 100%;
+}*/
+
+
+.row__inner{
+    transition: 450ms transform;
+    font-size: 0;
+    white-space: nowrap;
+    margin: 50px 0;
+    padding-bottom: 10px; /*Account for OS X scroll bar*/
+}
+
+
+.tile{
+    position: relative;
+    display: inline-block;
+    width: 340px; /*$tileWidth*/
+    height:191px; /* $tileHeight*/
+    margin-right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    cursor: hand;
+    transition: 450ms all;
+    transform-origin: center left;
+}
+
+
+.tile__img{
+    width: 100%;
+    height: 191px;
+    object-fit: cover;
+}
+
+
+.tile__details{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    font-size: 10px;
+    opacity: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    transition: 450ms opacity;
+}
+
+
+  tile__details::before{
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: black;
+  }
+
+
+  tile__details:after{
+      margin-top: -25px;
+      margin-left: -25px;
+      width: 50px;
+      height: 50px;
+      border: 3px solid #ecf0f1;
+      line-height: 50px;
+      text-align: center;
+      border-radius: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1;
+  }
+
+
+  tile__details:before{
+      content: '▶';
+      left: 0;
+      width: 100;
+      font-size: 30px;
+      margin-left: 7px;
+      margin-top: -18px;
+      text-align: center;
+      z-index: 2;
+  }
+
+
+  .tile:hover{
+      opacity: 1;
+  }
+
+
+.tile__title{
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+}
 
 
 
+/*
+ * Hover effects
 
+ We assume when you hover .row, you're also hovering a .tile
+ First, move the whole row towards the left*/
+.row__inner:hover{
+    transform: translate3d(62px, 0, 0);
+}
+
+.row__inner:hover .tile{
+    /* Fade out every tile*/
+    opacity: .3;
+    /*// And then grow the current tile and make it opaque again*/
+
+}
+
+.row__inner:hover .tile:hover{
+    transform: scale(1.5);
+    opacity: 1;
+}
+
+
+
+/*And finally move all tiles right of the current tile to the right,
+// so its flush against the hovered tile*/
+.tile:hover ~ .tile{
+    transform: translate3d(125px, 0, 0);
+}
