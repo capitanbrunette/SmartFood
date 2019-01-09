@@ -6,7 +6,6 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 
 //PROVES (TEMP)
-var loggedUser="recXIH2KiEu6lOui1";  //veure com fer-ho dinàmic //TEMP
 
 getRecepta("recZyEyBJMkrgWo3V"); //TEMP
 cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
@@ -186,13 +185,6 @@ function isUserFav(favedUsers){
     return isFav>=0;
 }
 
-var existeixUsuari=false; // variable global que es fa servir a existsUser per comprovar si l'usuari ja existeix. No hi ha hagut més remei que fer-ho amb variable global.
-
-existsUser("rfesrmizo")
-console.log("rfesrmizo "+existeixUsuari); //TEMP
-existsUser("dfuertes")
-console.log("dfuertes "+existeixUsuari); //TEMP
-
 function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FUNCIONA)
     var u = base('Users');
     u.select({
@@ -205,10 +197,13 @@ function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FU
         }
         //VARIABLE GLOBAL (NI AIXÍ!)
         //existeixUsuari = records.length!=0;
-        existeixUsuari = true;
-        console.log("existeix? "+userName+" "+existeixUsuari);
+        window.existeixUsuari = "1";
+        console.log("existeix? "+userName+" "+window.existeixUsuari);
+        //console.log(records);
     });
-    console.log("existeix? (fora) "+userName+" "+existeixUsuari);
+
+    console.log("existeix? (fora) "+userName+" "+window.existeixUsuari);
+    //console.log(records);
 }
 
 
@@ -276,12 +271,41 @@ function getFavsU(idUser){
 */
 
 function addUser(nom,username,password,email){
-    //comprova si l'usuari existeix. Retorna true o false.
-
+    //FALTA -> comprova si l'usuari existeix. Retorna true o false.
+    base('Users').create({
+        "usuari": username,
+        "Nom": nom,
+        "Email": email,
+        "Password": password
+      }, function(err, record) {
+          if (err) { console.error(err); return; }
+          console.log(record.getId());
+      });
 }
 
-function signInCheck(){
+function signInCheck(userName){
     //comprova si l'usuari existeix. Retorna true o false amb variable global.
+    var u = base('Users');
+    u.select({
+        maxRecords: 1,
+        filterByFormula: "FIND(LOWER(\""+userName+"\"),LOWER({usuari}))"
+    }).firstPage((err, records) => {
+        if(err){
+            console.error(err);
+            return;
+        }
+        if(records.length!=0){
+            document.getElementById("userid").value="recXIH2KiEu6lOui1";
+            //loggedUser="recXIH2KiEu6lOui1";
+            console.log("dins if: "+loggedUser);
+        }else{
+            loggedUser="nouser";
+            console.log("dins else: "+loggedUser);
+        }
+
+    });
+    console.log("abans return: "+loggedUser);
+    //return loggedUser;
 }
 
 //ALTRES FUNCIONS AUXILIARS
@@ -292,3 +316,23 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
       });
     
 }
+
+
+var prova = ["aaa","bbb","ccc"]; // An array with some objects
+
+function callbackClosure(i, callback) {
+  return function() {
+    return callback(i);
+  }
+}
+
+/*
+for( var i = 0; i < prova.length; ++i )
+{
+  API.doSthWithCallbacks( callbackClosure( i, function(i) {
+    prova[i] = 42+i;
+  }) );
+}
+
+consola(prova);
+*/
