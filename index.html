@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -21,7 +21,9 @@
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/airtable.browser.js"></script>
     <script type="text/javascript" src="js/smftv.airtable.js"></script>
-		<script type="text/javascript" src="js/jQKeyboard.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jQKeyboard.js"></script>
+
 
 
 
@@ -40,6 +42,8 @@
 </head>
 
 <body>
+
+	<div id="userid" ></div>
 
 	<section id="master">
 		<img src="assets/f1.jpg" alt="Burguer" height="1080" width="1920">
@@ -195,16 +199,16 @@
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
 		      <li class="nav-item active">
-		        <a class="nav-link" href="#"><i class="fa fa-home" style="font-size:48px;color:white"></i></a>
+		        <a class="nav-link" href="#"><i class="fa fa-home" onclick="loadHomeInfo()" style="font-size:48px;color:white"></i></a>
+		      </li>
+		      <li class="nav-item active">
+		        <a class="nav-link" href="#"><i class="fa fa-bolt"  onclick="loadNews()" style="font-size:48px;color:white"></i></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#"><i class="fa fa-bolt" style="font-size:48px;color:white"></i></a>
+		        <a class="nav-link" href="#"><i class="fa fa-newspaper-o"  onclick="loadBlog()" style="font-size:48px;color:white"></i></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#"><i class="fa fa-newspaper-o" style="font-size:48px;color:white"></i></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#"><i class="fa fa-heart" style="font-size:45px;color:white"></i></a>
+		        <a class="nav-link" href="#"><i class="fa fa-heart"  onclick="loadFav()" style="font-size:45px;color:white"></i></a>
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0">
@@ -228,14 +232,14 @@
 		  </div>
 		</nav>
 
-		<div id="main" class="container-fluid" style="display:none;">
+		<div id="main" class="container-fluid">
 			<div class="cover-box">
-				<img class="cover-image" alt="Cover" src="assets/f4.jpg">
+				<img class="cover-image" alt="Cover">
 			</div>
 
 			<div class="list" id="container">
-				<div class="row-container">
-					<h1 class="row-title">Featured</h1>
+				<div id="row-container-0" class="row-container">
+					<h1 id="row-title-01" class="row-title">Featured</h1>
 					<div id="row-01" class="row">
 						<!--
 						<div class="row-item">
@@ -245,41 +249,266 @@
 					</div>
 				</div>
 
-				<div class="row-container">
-					<h1 class="row-title">Favourite</h1>
+				<div id="row-container-1" class="row-container">
+					<h1 id="row-title-02" class="row-title">Favourite</h1>
 					<div id="row-02" class="row ">
 					</div>
 				</div>
 
-				<div class="row-container">
-					<h1 class="row-title">Popular</h1>
+				<div id="row-container-2" class="row-container">
+					<h1 id="row-title-03" class="row-title">Popular</h1>
 					<div id="row-03" class="row">
 					</div>
 				</div>
 			</div>
+
+			<!--
+
+				<div class="contain">
+				  <div class="row">
+				    <div class="row__inner">
+
+				      <div class="tile">
+								<div class="tile__details">
+									<div class="tile__title">
+										Top Gear
+									</div>
+								</div>
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-1.jpg" alt=""  />
+				        </div>
+
+				      </div>
+
+				      <div class="tile">
+								<div class="tile__details">
+									<div class="tile__title">
+										Top Gear
+									</div>
+								</div>
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-2.jpg" alt=""  />
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-3.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-4.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-5.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-6.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-7.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-8.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-9.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-10.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-11.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-12.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-13.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-14.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-15.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-16.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				      <div class="tile">
+				        <div class="tile__media">
+				          <img class="tile__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/70390/show-17.jpg" alt=""  />
+				        </div>
+				        <div class="tile__details">
+				          <div class="tile__title">
+				            Top Gear
+				          </div>
+				        </div>
+				      </div>
+
+				    </div>
+			  </div>
+
+	</div>
+			-->
+
 		</div>
-		
-		<div id="recipe" class="container-fluid">
+
+
+
+
+		<div id="recipe" class="container-fluid" style="display:none;">
 			<div class="general-container">
 				<div class="left-container">
-					<div class="info-row" style="background-color: #ffcc99">
-						<div class="info-item" style="background-color: #994d00"></div>
-						<div class="info-item" style="background-color: #994d00"></div>
-						<div class="info-item" style="background-color: #994d00"></div>
+					<div class="info-row">
+						<div class="info-item">
+							<i class="oi oi-clock" style="font-size:35px;color:#484848"></i>
+							<span id="time" class="badge badge-dark detail"></span>
+						</div>
+						<div class="info-item">
+							<i class="oi oi-fire" style="font-size:35px;color:#484848"></i>
+							<span id="timehot" class="badge badge-dark detail"></span>
+						</div>
+						<div class="info-item">
+							<i class="fa fa-list-ol" style="font-size:35px;color:#484848"></i>
+							<span id="numbersteps" class="badge badge-dark detail"></span>
+						</div>
+						<div class="info-item">
+							<i class="oi oi-eye" style="font-size:35px;color:#484848"></i>
+							<span id="views" class="badge badge-dark detail"></span>
+						</div>
+						<div class="info-item">
+							<i class="oi oi-people" style="font-size:35px;color:#484848"></i>
+							<span id="people" class="badge badge-dark detail"></span>
+						</div>
+						<div class="info-item">
+							<i class="fa fa-hashtag" style="font-size:35px;color:#484848"></i>
+							<span id="tags" class="badge badge-dark detail"></span>
+						</div>
 					</div>
-					<div class="central-image" style="background-color: #ffcc66"></div>
-					<div class="thumbnails-row" style="background-color: #b3e0ff">
-						<div class="thumbnail" style="background-color: #b3e0ff"></div>
-						<div class="thumbnail" style="background-color: #b3e0ff"></div>
-						<div class="thumbnail" style="background-color: #b3e0ff"></div>
-						<div class="thumbnail" style="background-color: #b3e0ff"></div>
-						<div class="thumbnail" style="background-color: #b3e0ff"></div>
+					<div class="central-image" style="background-color: #ffcc66">
+						<img id="focus-image" class="focus-image" alt="CENTER IMAGE">
 					</div>
+
+					<ul class="flex-container">
+					 <!-- <li class="flex-item">1</li> -->
+					</ul>
+
 				</div>
-				
+
 				<div class="right-container">
-					<h1 class="page-title">Titol de la repta</h1>
-					<div class="button-row" style="background-color: #ace600">
+					<h1 id="title-recipe" class="page-title"></h1>
+					<div class="button-row">
 						<div class="btn-group btn-group-toggle" data-toggle="buttons">
 						  <label class="btn btn-secondary group-button active">
 						    <input type="radio" name="options" id="option1" autocomplete="off" checked> Ingredients
@@ -289,17 +518,20 @@
 						  </label>
 						 </div>
 					</div>
-					<div class="info-container" style="background-color: #ff9999">
-						<div class="step" style="background-color: #55ff55">1. Aquest serà el primer pas</div>
-						<div class="step" style="background-color: #55ff55">2. Aquet el segon per omplir</div>
-						<div class="step" style="background-color: #55ff55">3. I anem amb el tercer que és una mica és llarg de lo normal per comprovar com quedari l'escrit si es tracta d'alguna explicació molt prolongada que calgui llegir detingudament</div>
+					<div class="info-container">
+						<div id="ingredients">
+						<!-- <div class="step">1. Aquest serà el primer pas</div>
+							<div class="step">2. Aquet el segon per omplir</div>
+							<div class="step">3. I anem amb el tercer que és una mica és llarg de lo normal per comprovar com quedari l'escrit si es tracta d'alguna explicació molt prolongada que calgui llegir detingudament</div>
+						 -->
+						</div>
+						<div id="steps" style="display:none;"></div>
 					</div>
 				</div>
-			
 			</div>
-		
+
 		</div>
 	</section>
-	
+
 </body>
 </html>

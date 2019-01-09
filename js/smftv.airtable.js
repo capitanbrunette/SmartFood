@@ -7,7 +7,7 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 //PROVES (TEMP)
 
-getRecepta("recZyEyBJMkrgWo3V"); //TEMP
+/*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
 cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
 
 
@@ -23,10 +23,10 @@ cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
  */
 var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     $(capa).empty();
-    
+
     var r = base(taula);
     var first = 1;
-    
+
     r.select({
         sort: ordre,
         view: vista,
@@ -47,8 +47,8 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             $imatge.attr("src", foto);
             var $receptaInfo = $('<div>');
             $receptaInfo.attr('class', "row-item");
+            $receptaInfo.attr('id', id);
             $receptaInfo.append($imatge);
-    
             $(capa).append($receptaInfo);
             if(first){
             	$('.cover-image').attr("src",foto);
@@ -58,6 +58,7 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
 
         fetchNextPage();
         document.getElementsByClassName("row")[0].getElementsByClassName("row-item")[0].classList.add("selected");
+        $('#'+document.getElementsByClassName("row")[0].getElementsByClassName("row-item")[0].id).animate({width:"380px", height:"288px"});
     }, function done(error) {
         console.log(error);
     });
@@ -67,6 +68,7 @@ function getRecepta(idRecepta,capa){
     var r = base('Receptes');
 	r.find(idRecepta, function(err, record) {
         if (err) { console.error(err); return; }
+        $(".flex-container").empty();
 
         var nom_recepta = record.get("Nom recepta");
         var comensals = record.get("Comensals");
@@ -81,23 +83,37 @@ function getRecepta(idRecepta,capa){
         var featured = record.get("Featured");
         var favoritedBy = record.get("FavoritedBy");
         var steps = record.get("Steps");
-        var fotos = getMediaFotosR(record.get('Fotos'),"capa");
-
-        getStepsR(nom_recepta,"capa");
-        getMediaVideosR(nom_recepta,"capa");
-        getIngredientsR(nom_recepta,"capa");
+        var fotos = getMediaFotosR(record.get('Fotos'),".flex-container");
+        getStepsR(nom_recepta,"#steps");
+        //getMediaFotosR(fotos_in,".flex-container");
+        getMediaVideosR(nom_recepta,".flex-container");
+        getIngredientsR(nom_recepta,"#ingredients");
         getTags(nom_recepta,"capa");
         //setFav("recZyEyBJMkrgWo3V",nom_recepta);
-        
+
         incrementaVisitaR(idRecepta, visites);
-        //consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
-        
+        consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
+
         //MAQUETACIÓ AQUÍ
+
+        //MAQUETACIÓ
+        $("#time").empty();
+        $("#time").text(temps);
+        $("#timehot").empty();
+        $("#timehot").text(temps_coccio);
+        $("#people").empty();
+        $("#people").text(comensals);
+        $("#views").empty();
+        $("#views").text(visites);
+        $("#numbersteps").empty();
+        $("#numbersteps").text(steps.length);
+        $("#title-recipe").empty();
+        $("#title-recipe").append(nom_recepta);
 
     });
 }
 
-function getStepsR(nom_recepta,capa){  
+function getStepsR(nom_recepta,capa){
     $(capa).empty();
 
     var s = base("Steps");
@@ -108,9 +124,10 @@ function getStepsR(nom_recepta,capa){
         if (err) { console.error(err); return; }
         records.forEach(function(record) {
             var pas = record.get('Text');
-            
             //MAQUETACIÓ AQUÍ
-
+            var $step = $('<div>').attr('class', "step");
+            $step.append(pas);
+            $(capa).append($step);
         });
     });
 }
@@ -123,12 +140,21 @@ function getMediaFotosR(fotos_in,capa){
         fotos_out[i] = [];
         fotos_out[i][0]=fotos_in[i].thumbnails.large.url;
         fotos_out[i][1]=fotos_in[i].thumbnails.full.url;
+        var $imagecontainer = $('<li>').attr('class', "flex-item");
+        if(i == 0){
+            $imagecontainer.addClass("selected");
+        	$("#focus-image").attr("src",fotos_out[i][1]); //fotos_out[i][0]
+        }
+        var $image = $('<img>').attr('class', "thumbnail");
+        $image.attr("src",fotos_out[i][0]);
+        $imagecontainer.append($image);
+        $(capa).append($imagecontainer);
+
     }
     return fotos_out;
 }
 
 function getMediaVideosR(nom_recepta,capa){
-    $(capa).empty();
 
     var v = base("Videos");
     v.select({
@@ -137,7 +163,16 @@ function getMediaVideosR(nom_recepta,capa){
         if (err) { console.error(err); return; }
         records.forEach(function(record) {
             var url_video = record.get('URL');
-            
+            var $container = $('<li>').attr('class', "flex-item");
+            var video = $('<video />', {
+                id: 'video',
+                class: 'thumbnail',
+                src: url_video,
+                type: 'video/mp4',
+                controls: true
+            });
+            $container.append(video);
+            $(capa).append($container);
             //MAQUETACIÓ AQUÍ
 
             //console.log('Retrieved VIDEO:', url_video);
@@ -154,9 +189,11 @@ function getIngredientsR(nom_recepta,capa){
         if (err) { console.error(err); return; }
         records.forEach(function(record) {
             var ingredient = record.get('Ingredient');
-            
-            //MAQUETACIÓ AQUÍ
 
+            //MAQUETACIÓ AQUÍ
+            var $ingredient = $('<div>').attr('class', "step");
+            $ingredient.append(ingredient);
+            $(capa).append($ingredient);
             //console.log('Retrieved ING:', ingredient);
         });
     });
@@ -172,7 +209,7 @@ function getTags(nom_recepta,capa){
         if (err) { console.error(err); return; }
         records.forEach(function(record) {
             var tag = record.get('Name');
-            
+
             //MAQUETACIÓ AQUÍ
 
             console.log('Retrieved TAG:', tag);
@@ -224,7 +261,7 @@ function cerca(paraules,capa){
         if (err) { console.error(err); return; }
         records.forEach(function(record) {
             var pas = record.get('Text');
-            
+
             //MAQUETACIÓ AQUÍ
 
         });
@@ -314,7 +351,7 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
     dades.forEach(function myFunction(item, index) {
         console.log('Retrieved ', "index[" + index + "]: " + item + "<br>");
       });
-    
+
 }
 
 

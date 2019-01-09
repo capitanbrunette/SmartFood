@@ -1,4 +1,4 @@
-const RETURN_BUTTON = 10009, KEY_ENTER = 13, KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
+const KEY_BACK = 10009, KEY_EXIT= 10182, KEY_MENU = 18, KEY_ENTER = 13, KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
 var i = 0, j = 0;
 
 window.onload = function () {
@@ -81,59 +81,128 @@ function keyListenerSignIn(e) {
 }
 
 function keyListenerHome(e){
-	console.log("FUNCIO HOMEKEY");
 	var target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
 
 	if(e.keyCode === KEY_UP){
-    	if(i === 1){
+    	/*if(i === 1){
    			$('.cover-box').show();
    			$('.list').css("max-height", "485px");
-    	}
+    	}*/
 		target[j].classList.remove("selected");
 		j = 0;
 		if(i > 0 && i <= 2){ i--;}
 		target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
 		target[j].classList.add("selected");
 		reloadCoverImage();
-    }
+		$('#row-container-'+(i)).slideDown("slow", "linear", 	$('#row-container-'+(i)).animate({opacity: 1}, 500));
 
-    if(e.keyCode === KEY_DOWN){
-    	if(i === 0){
-    		$('.cover-box').hide();
-    		$('.list').css("max-height", "1080px");
-    	}
+  }
+
+  if(e.keyCode === KEY_DOWN){
+  	/*if(i === 0){
+  		$('.cover-box').hide();
+  		$('.list').css("max-height", "1080px");
+  	}*/
 		target[j].classList.remove("selected");
 		j = 0;
 		if(i >= 0 && i < 2){ i++;}
 		target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
 		target[j].classList.add("selected");
 		reloadCoverImage();
-    }
+		$('#row-container-'+(i-1)).slideUp("slow", "linear", 	$('#row-container-'+(i-1)).animate({opacity: 0.5}, 500));
+  }
+
 	if(e.keyCode === KEY_RIGHT){
+		console.log(j);
 		target[j].classList.remove("selected");
-		if(j >= 0 && j < target.length-1){ j++;}
+		console.log($('#'+target[j].id));
+		/*$('#'+target[j].id).width = "350px";
+		$('#'+target[j].id).height = "100%";*/
+
+		if(j >= 0 && j < target.length-1){
+			j++;
+			console.log(j);
+			if(j>=4){
+				target[j-4].style["display"]="none";
+				/*var $item = $('#'+target[j-4].id);
+				$item.fadeOut(300);*/
+			}
+		}
 		target[j].classList.add("selected");
+		var $item = target[j];
+		var $previous = target[j-1];
+		console.log($("row-0"+(i+1)+"#"+target[j].id));
+		$("row-0"+(i+1)+"#"+target[j].id).animate({width:"380px", height:"288px"});
+		$("row-0"+(i+1)+"#"+target[j-1].id).animate({width:"380px", height:"258px"});
+		//$('#row-0'+(i+1)+target[j].id).animate({width:"380px", height:"288px"});
+		//$('#'+target[j+1].id).width="350px";
+		//$('#'+target[j+1].id).height="258px";
+		//$('#row-0'+(i+1)+target[j-1].id).animate({width:"350px", height:"258px"});
 		reloadCoverImage();
 	}
+
 	if(e.keyCode === KEY_LEFT){
 		target[j].classList.remove("selected");
-		if(j > 0 && j <= target.length-1){ j--;}
+	/*	$('#'+target[j].id).width = "350px";
+		$('#'+target[j].id).height = "100%";*/
+		if(j > 0 && j <= target.length-1){
+			if(j>=4){
+				console.log("ARRIBO I PETA");
+				target[j-4].style["display"]="block";
+			}
+			j--;
+			console.log(j);
+		}
 		target[j].classList.add("selected");
+		$("row-0"+(i+1)+"#"+target[j].id).animate({width:"380px", height:"288px"});
+		$("row-0"+(i+1)+"#"+target[j+1].id).animate({width:"380px", height:"258px"});
 		reloadCoverImage();
-  }else{
+
+	}
+	if(e.keyCode === KEY_ENTER){
+		var idRecepta = target[j].id;
+		getRecepta(idRecepta,"capa");
+		//setTimeout(3000);
+		$("#main").hide(1000);
+		$("#recipe").delay(1000).show(1000);
+		document.removeEventListener("keydown", keyListenerHome, false);
+		document.addEventListener("keydown", keyListenerRecipe, false);
+	}
+	else{
 			e.preventDefault();
 	}
 }
 
-function keyListenerKeyboard(){
+function keyListenerKeyboard(e){
+		$("#recipe").hide(1000);
+		$("#main").delay(1000).show(1000);
+}
 
+function keyListenerRecipe(e){
+	console.log("EEP Estic dins");
+	if(e.keyCode === KEY_BACK){
+		console.log("soc el back");
+		document.removeEventListener("keydown", keyListenerRecipe, false);
+		document.addEventListener("keydown", keyListenerHome, false);
+		$("#recipe").hide(1000);
+		$("#main").delay(1000).show(1000);
+	}
+
+	if(e.keyCode === KEY_MENU){
+		console.log("soc home");
+		document.removeEventListener("keydown", keyListenerRecipe, false);
+		document.addEventListener("keydown", keyListenerHome, false);
+	}
 }
 
 
 function signIn(){
+  //  console.log(tizen.tvinputdevice.getSupportedKeys());
+
 	i = 0; j = 0;
-	  document.getElementById("master").style["display"]="none";
-	  document.getElementById("home").style["display"]="inline";
+		$("#master").fadeOut("slow", "linear", $("#home").show());
+	 // document.getElementById("master").style["display"]="none";
+	 // document.getElementById("home").style["display"]="inline";
 	  $('.modal-backdrop').remove();
 	  document.removeEventListener("keydown", keyListenerSignIn, false);
 	  startHome();
@@ -141,11 +210,35 @@ function signIn(){
 }
 
 function loadHomeInfo(){
+	console.log("He entrat HOME");
+
 	var ordre=[{field: 'Nom recepta', direction: 'asc'}];
     var limit=10;
     loadReceptes("#row-01","featured","Receptes","",ordre,limit);
     loadReceptes("#row-02","favorited","Receptes","",ordre,limit);
     loadReceptes("#row-03","popular","Receptes","",ordre,limit);
+}
+
+function loadNews(){
+	console.log("He entrat NEWS");
+	$("#row-01").empty();
+	$("#row-02").empty();
+	$("#row-03").empty();
+	$("#row-title-01").empty();
+	$("#row-title-02").empty();
+	$("#row-title-03").empty();
+	$("#row-title-01").append("Starters");
+	$("#row-title-02").append("Main dishes");
+	$("#row-title-03").append("Desserts");
+
+		var ordre=[
+				{field:'Creat', direction:'desc'},
+				{field: 'Nom recepta', direction: 'asc'}
+		]
+		var limit=5;
+    loadReceptes("#row-01","Primers","Receptes","",ordre,limit);
+    loadReceptes("#row-02","Segons","Receptes","",ordre,limit);
+    loadReceptes("#row-03","Postres","Receptes","",ordre,limit);
 }
 
 function reloadCoverImage(){
@@ -159,6 +252,8 @@ function startHome(){
 	//setTimeout(reloadCoverImage, 10000);
 
 }
+
+/************** FUNCIONS DEL TECLAT ********************/
 
 
 $(function(){
