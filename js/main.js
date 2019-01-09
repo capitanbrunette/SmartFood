@@ -211,22 +211,51 @@ function signIn(){
 
 function loadHomeInfo(){
 	console.log("He entrat HOME");
+	//window.location.replace("index.html");
+	$("#recipe").hide();
+	$("#search").hide();
+	$("#blog").hide();
+
+	$("#main").show();
 
 	var ordre=[{field: 'Nom recepta', direction: 'asc'}];
     var limit=10;
     loadReceptes("#row-01","featured","Receptes","",ordre,limit);
-    loadReceptes("#row-02","favorited","Receptes","",ordre,limit);
-    loadReceptes("#row-03","popular","Receptes","",ordre,limit);
+    loadReceptes("#row-02","popular","Receptes","",ordre,limit);
+    loadReceptes("#row-03","lastVisited","Receptes","",ordre,limit);
+
 }
 
+function loadFav(){
+	//window.location.replace("index.html");
+	$("#recipe").hide();
+	$("#search").hide();
+	$("#blog").hide();
+
+	$("#main").show();
+
+	clearMainDisplay();
+	$("#row-title-01").append("My List");
+    var loggedUserName = "dfuertes"; //aquí cal posar el username de l'usuari que estigui guardat a la sessió
+    var capa="#row-01";
+    var vista="favorited";
+    var taula="Receptes";
+    var condicio="FIND(LOWER(\""+loggedUserName+"\"),LOWER({FavoritedBy}))>0";
+    var ordre=[{field: 'Nom recepta', direction: 'asc'}];
+    var limit=100;
+    loadReceptes(capa,vista,taula,condicio,ordre,limit);
+}
+
+
 function loadNews(){
+	//window.location.replace("index.html");
+	$("#recipe").hide();
+	$("#search").hide();
+	$("#blog").hide();
+	$("#main").show();
+
 	console.log("He entrat NEWS");
-	$("#row-01").empty();
-	$("#row-02").empty();
-	$("#row-03").empty();
-	$("#row-title-01").empty();
-	$("#row-title-02").empty();
-	$("#row-title-03").empty();
+	clearMainDisplay();
 	$("#row-title-01").append("Starters");
 	$("#row-title-02").append("Main dishes");
 	$("#row-title-03").append("Desserts");
@@ -240,6 +269,56 @@ function loadNews(){
     loadReceptes("#row-02","Segons","Receptes","",ordre,limit);
     loadReceptes("#row-03","Postres","Receptes","",ordre,limit);
 }
+
+function clearMainDisplay(){
+	$("#row-01").empty();
+	$("#row-02").empty();
+	$("#row-03").empty();
+	$("#row-title-01").empty();
+	$("#row-title-02").empty();
+	$("#row-title-03").empty();
+}
+
+function loadBlog(){
+
+	$("#recipe").hide();
+	$("#search").hide();
+	$("#main").hide();
+
+	$("#blog").show();
+	//keyListenerBlog();
+	//window.location.replace("blog.html");
+}
+
+function loadSearch(){
+	//window.location.replace("index.html");
+	$("#recipe").hide();
+	$("#main").hide();
+	$("#blog").hide();
+	$("#search").show();
+
+}
+
+function searchRecipe(){
+	var paraules = ['hamburguesa','canelons','bistec'];
+	var i;
+	filtre = "OR(";
+	for(i=0;i<paraules.length;++i){
+			filtre = filtre + "FIND(LOWER('"+paraules[i]+"'),LOWER({Nom recepta}))"
+			if(i!=paraules.length-1) filtre = filtre + ", ";
+	}
+	filtre = filtre + ")";
+
+	var ordre=[{field: 'Nom recepta', direction: 'asc'}];
+
+	console.log(filtre);
+
+	loadReceptes("#row-search", "Resum", "Receptes", filtre, ordre, 5);
+
+	//cerca(['hamburguesa','canelons','bistec'],"row-search");
+}
+
+
 
 function reloadCoverImage(){
 	var newSrc = document.getElementsByClassName("row")[i].getElementsByClassName("item-image")[j].src;

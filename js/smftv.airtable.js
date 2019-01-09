@@ -254,7 +254,13 @@ function cerca(paraules,capa){
     }
     filtre = filtre + ")";
 
-    var r = base("Receptes");
+    var ordre=[{field: 'Nom recepta', direction: 'asc'}];
+
+    console.log(filtre);
+
+    //loadReceptes(capa, "Resum", "Receptes", filtre, ordre, 5);
+
+    /*var r = base("Receptes");
     r.select({
         filterByFormula: filtre
     }).firstPage(function(err, records) {
@@ -262,10 +268,12 @@ function cerca(paraules,capa){
         records.forEach(function(record) {
             var pas = record.get('Text');
 
+            console.log(record);
+
             //MAQUETACIÓ AQUÍ
 
         });
-    });
+    });*/
 }
 
 //FUNCIONS D'ACTUALITZACIÓ
