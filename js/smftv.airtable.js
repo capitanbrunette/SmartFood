@@ -6,10 +6,10 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 
 //PROVES (TEMP)
-
+var loggedUser="recXIH2KiEu6lOui1";
 /*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
 cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
-signInCheck("rfermizo");
+
 
 //FUNCIONS DE CONSULTA
 
@@ -40,7 +40,6 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             var entradeta =  record.get('Entradeta');
             var foto = record.get('Fotos')[0].thumbnails.large.url;
             var fav = isUserFav(record.get('Users')); //boolean
-            getUserData(document.getElementById("userid").value,"capa");
             //consola([id,nom_recepta,entradeta,foto,fav]);
 
             //MAQUETACIÓ
@@ -65,21 +64,6 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     });
 };
 
-function getUserData(idUser,capa){
-    var u = base('Users');
-	u.find(idUser, function(err, record) {
-        if (err) { console.error(err); return; }
-        var username = record.get("usuari");
-        var nom = record.get("Nom");
-        var AvatarImg = record.get("AvatarImg")[0].thumbnails.small.url;
-
-        //consola([username,nom,AvatarImg]);
-
-        //MAQUETACIÓ
-
-    });
-}
-
 function getRecepta(idRecepta,capa){
     var r = base('Receptes');
 	r.find(idRecepta, function(err, record) {
@@ -101,15 +85,14 @@ function getRecepta(idRecepta,capa){
         var steps = record.get("Steps");
         var fotos = getMediaFotosR(record.get('Fotos'),".flex-container");
         getStepsR(nom_recepta,"#steps");
+        //getMediaFotosR(fotos_in,".flex-container");
         getMediaVideosR(nom_recepta,".flex-container");
         getIngredientsR(nom_recepta,"#ingredients");
         getTags(nom_recepta,"capa");
-
-        setFav(idRecepta);
+        //setFav("recZyEyBJMkrgWo3V",nom_recepta);
 
         incrementaVisitaR(idRecepta, visites);
-        //consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
-        consola([favoritedBy]);
+        consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
 
         //MAQUETACIÓ AQUÍ
 
@@ -235,8 +218,29 @@ function getTags(nom_recepta,capa){
 }
 
 function isUserFav(favedUsers){
-    var isFav = favedUsers.indexOf(document.getElementById("userid").value); //si el troba, retorna la posició a l'array (0 la primera)
+    var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
+}
+
+function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FUNCIONA)
+    var u = base('Users');
+    u.select({
+        maxRecords: 1,
+        filterByFormula: "FIND(LOWER(\""+userName+"\"),LOWER({usuari}))"
+    }).firstPage((err, records) => {
+        if(err){
+            console.error(err);
+            return;
+        }
+        //VARIABLE GLOBAL (NI AIXÍ!)
+        //existeixUsuari = records.length!=0;
+        window.existeixUsuari = "1";
+        console.log("existeix? "+userName+" "+window.existeixUsuari);
+        //console.log(records);
+    });
+
+    console.log("existeix? (fora) "+userName+" "+window.existeixUsuari);
+    //console.log(records);
 }
 
 
@@ -275,6 +279,9 @@ function cerca(paraules,capa){
 //FUNCIONS D'ACTUALITZACIÓ
 
 function incrementaVisitaR(idRecepta,visites){
+	
+	//TO DO: actualitzar last visit
+	
     var r = base("Receptes");
     visites++;
 	r.update(idRecepta, {
@@ -287,26 +294,29 @@ function incrementaVisitaR(idRecepta,visites){
       })
 }
 
-function setFav(idRecepta){
-    console.log("ENTRA A SETFAV-------------------");
-    var r = base("Receptes");
-	r.find(idRecepta, function(err, record) {
-        if (err) { console.error(err); return; }
-        var userid = document.getElementById("userid").value;
-        var favoritedBy = record.get("Users");
-        consola([favoritedBy]);
-        favoritedBy.push(userid);
-        consola([favoritedBy]);
-
-        var r2 = base("Receptes");
-        r2.update(idRecepta, {
-            "Users": favoritedBy
-          }, function(err, record) {
-              if (err) { console.error(err); return; }
-              console.log(record.get('Nom recepta'));
-          });
-    });    
+/*
+function setFav(idUser,nom_recepta){
+    var u = base("Users");
+    var favs = getFavsU(idUser);
+    favs.push(nom_recepta);
+	u.update(idUser, {
+        "Favorits": favs
+      }, (err, record) => {
+          if (err) {
+            console.error(err)
+            return
+          }
+      })
 }
+
+function getFavsU(idUser){
+    var u = base('Users');
+	u.find(idUser, function(err, record) {
+        if (err) { console.error(err); return; }
+        //var global...?
+    });
+}
+*/
 
 function addUser(nom,username,password,email){
     //FALTA -> comprova si l'usuari existeix. Retorna true o false.
@@ -317,7 +327,7 @@ function addUser(nom,username,password,email){
         "Password": password
       }, function(err, record) {
           if (err) { console.error(err); return; }
-          //console.log(record.getId());
+          console.log(record.getId());
       });
 }
 
@@ -333,13 +343,17 @@ function signInCheck(userName){
             return;
         }
         if(records.length!=0){
-            document.getElementById("userid").value = records[0].getId();
-            //console.log("USERID: "+document.getElementById("userid").value);
+            document.getElementById("userid").value="recXIH2KiEu6lOui1";
+            //loggedUser="recXIH2KiEu6lOui1";
+            console.log("dins if: "+loggedUser);
         }else{
-            document.getElementById("userid").value="nouser";
+            loggedUser="nouser";
+            console.log("dins else: "+loggedUser);
         }
 
     });
+    console.log("abans return: "+loggedUser);
+    //return loggedUser;
 }
 
 //ALTRES FUNCIONS AUXILIARS
@@ -350,3 +364,23 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
       });
 
 }
+
+
+var prova = ["aaa","bbb","ccc"]; // An array with some objects
+
+function callbackClosure(i, callback) {
+  return function() {
+    return callback(i);
+  }
+}
+
+/*
+for( var i = 0; i < prova.length; ++i )
+{
+  API.doSthWithCallbacks( callbackClosure( i, function(i) {
+    prova[i] = 42+i;
+  }) );
+}
+
+consola(prova);
+*/

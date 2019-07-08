@@ -217,14 +217,12 @@ h1{
 .flex-container {
   list-style: none;
   display: flex;
-  background-color: #e8eaf6;
   width: 1290px;
   overflow: hidden;
   padding: 12px;
   flex: 25%;
 }
 .flex-item {
-  background-color: #c5cae9;
   width: 300px;
   height: 220px;
   max-width: 300px;
@@ -411,4 +409,12 @@ $moveRight = $tileWidth * ($growFactor - 1);*/
 // so its flush against the hovered tile*/
 .tile:hover ~ .tile{
     transform: translate3d(125px, 0, 0);
+}
+
+.btn{
+    font-size: 35px;
+}
+
+label{
+    font-size: 25px;
 }
