@@ -1,3 +1,4 @@
+/* global $ */
 const Airtable = require('airtable');
 Airtable.configure({
     apiKey: 'keyNb4ZbKPKQ59R9K'
@@ -6,10 +7,11 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 
 //PROVES (TEMP)
-var loggedUser="recXIH2KiEu6lOui1";
-/*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
-cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
 
+/*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
+//cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
+signInCheck("rfermizo","12345");
+getUserData('recYlrPq4TsMQjrsm');
 
 //FUNCIONS DE CONSULTA
 
@@ -40,6 +42,7 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
             var entradeta =  record.get('Entradeta');
             var foto = record.get('Fotos')[0].thumbnails.large.url;
             var fav = isUserFav(record.get('Users')); //boolean
+            getUserData(document.getElementById("userid").value,"capa");
             //consola([id,nom_recepta,entradeta,foto,fav]);
 
             //MAQUETACIÓ
@@ -64,6 +67,22 @@ var loadReceptes = function(capa, vista, taula, condicio, ordre, limit) {
     });
 };
 
+function getUserData(idUser){
+	console.log('id user recuperat: '+idUser);
+    var u = base('Users');
+	u.find(idUser, function(err, record) {
+        if (err) { console.error(err); return; }
+        var username = record.get("usuari");
+        var nom = record.get("Nom");
+        var AvatarImg = record.get("AvatarImg")[0].thumbnails.small.url;
+
+        consola([username,nom,AvatarImg]);
+
+        //MAQUETACIÓ
+
+    });
+}
+
 function getRecepta(idRecepta,capa){
     var r = base('Receptes');
 	r.find(idRecepta, function(err, record) {
@@ -85,14 +104,15 @@ function getRecepta(idRecepta,capa){
         var steps = record.get("Steps");
         var fotos = getMediaFotosR(record.get('Fotos'),".flex-container");
         getStepsR(nom_recepta,"#steps");
-        //getMediaFotosR(fotos_in,".flex-container");
         getMediaVideosR(nom_recepta,".flex-container");
         getIngredientsR(nom_recepta,"#ingredients");
         getTags(nom_recepta,"capa");
-        //setFav("recZyEyBJMkrgWo3V",nom_recepta);
+
+        setFav(idRecepta);
 
         incrementaVisitaR(idRecepta, visites);
-        consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
+        //consola([idRecepta,nom_recepta,comensals,temps_coccio,temps,temps_preparacio,entradeta,categoria,visites,created_time,last_visit,featured,favoritedBy,tags,fotos]);
+        consola([favoritedBy]);
 
         //MAQUETACIÓ AQUÍ
 
@@ -141,7 +161,7 @@ function getMediaFotosR(fotos_in,capa){
         fotos_out[i][0]=fotos_in[i].thumbnails.large.url;
         fotos_out[i][1]=fotos_in[i].thumbnails.full.url;
         var $imagecontainer = $('<li>').attr('class', "flex-item");
-        if(i == 0){
+        if(i === 0){
             $imagecontainer.addClass("selected");
         	$("#focus-image").attr("src",fotos_out[i][1]); //fotos_out[i][0]
         }
@@ -218,39 +238,20 @@ function getTags(nom_recepta,capa){
 }
 
 function isUserFav(favedUsers){
-    var isFav = favedUsers.indexOf(loggedUser); //si el troba, retorna la posició a l'array (0 la primera)
+    var isFav = favedUsers.indexOf(document.getElementById("userid").value); //si el troba, retorna la posició a l'array (0 la primera)
     return isFav>=0;
-}
-
-function existsUser(userName){ //no sé si és la millor manera... (ENCARA NO FUNCIONA)
-    var u = base('Users');
-    u.select({
-        maxRecords: 1,
-        filterByFormula: "FIND(LOWER(\""+userName+"\"),LOWER({usuari}))"
-    }).firstPage((err, records) => {
-        if(err){
-            console.error(err);
-            return;
-        }
-        //VARIABLE GLOBAL (NI AIXÍ!)
-        //existeixUsuari = records.length!=0;
-        window.existeixUsuari = "1";
-        console.log("existeix? "+userName+" "+window.existeixUsuari);
-        //console.log(records);
-    });
-
-    console.log("existeix? (fora) "+userName+" "+window.existeixUsuari);
-    //console.log(records);
 }
 
 
 function cerca(paraules,capa){
     $(capa).empty();
     var i;
-    filtre = "OR(";
+    var filtre = "OR(";
     for(i=0;i<paraules.length;++i){
-        filtre = filtre + "FIND(LOWER('"+paraules[i]+"'),LOWER({Nom recepta}))"
-        if(i!=paraules.length-1) filtre = filtre + ", ";
+        filtre = filtre + "FIND(LOWER('"+paraules[i]+"'),LOWER({Nom recepta}))";
+        if(i!==paraules.length-1){
+        		filtre = filtre + ", ";
+        }
     }
     filtre = filtre + ")";
 
@@ -279,44 +280,38 @@ function cerca(paraules,capa){
 //FUNCIONS D'ACTUALITZACIÓ
 
 function incrementaVisitaR(idRecepta,visites){
-	
-	//TO DO: actualitzar last visit
-	
     var r = base("Receptes");
     visites++;
 	r.update(idRecepta, {
         "Visites": visites
       }, (err, record) => {
           if (err) {
-            console.error(err)
-            return
+            console.error(err);
+            return;
           }
-      })
+      });
 }
 
-/*
-function setFav(idUser,nom_recepta){
-    var u = base("Users");
-    var favs = getFavsU(idUser);
-    favs.push(nom_recepta);
-	u.update(idUser, {
-        "Favorits": favs
-      }, (err, record) => {
-          if (err) {
-            console.error(err)
-            return
-          }
-      })
-}
-
-function getFavsU(idUser){
-    var u = base('Users');
-	u.find(idUser, function(err, record) {
+function setFav(idRecepta){
+    console.log("ENTRA A SETFAV-------------------");
+    var r = base("Receptes");
+	r.find(idRecepta, function(err, record) {
         if (err) { console.error(err); return; }
-        //var global...?
-    });
+        var userid = document.getElementById("userid").value;
+        var favoritedBy = record.get("Users");
+        consola([favoritedBy]);
+        favoritedBy.push(userid);
+        consola([favoritedBy]);
+
+        var r2 = base("Receptes");
+        r2.update(idRecepta, {
+            "Users": favoritedBy
+          }, function(err, record) {
+              if (err) { console.error(err); return; }
+              console.log(record.get('Nom recepta'));
+          });
+    });    
 }
-*/
 
 function addUser(nom,username,password,email){
     //FALTA -> comprova si l'usuari existeix. Retorna true o false.
@@ -327,33 +322,31 @@ function addUser(nom,username,password,email){
         "Password": password
       }, function(err, record) {
           if (err) { console.error(err); return; }
-          console.log(record.getId());
+          //console.log(record.getId());
       });
 }
 
-function signInCheck(userName){
-    //comprova si l'usuari existeix. Retorna true o false amb variable global.
+function signInCheck(userName,pass){
     var u = base('Users');
     u.select({
         maxRecords: 1,
-        filterByFormula: "FIND(LOWER(\""+userName+"\"),LOWER({usuari}))"
+        filterByFormula: "AND(FIND(LOWER(\""+userName+"\"),LOWER({usuari})),FIND(\""+pass+"\",{Password}))"
     }).firstPage((err, records) => {
         if(err){
             console.error(err);
             return;
         }
-        if(records.length!=0){
-            document.getElementById("userid").value="recXIH2KiEu6lOui1";
-            //loggedUser="recXIH2KiEu6lOui1";
-            console.log("dins if: "+loggedUser);
+        if(records.length!==0){
+        		//PASS I USER OK
+            document.getElementById("userid").value = records[0].getId();
+            console.log("EXISTEIX USERID: "+document.getElementById("userid").value+" i és: "+records[0].get("usuari")+" "+records[0].get("Password"));
+            
         }else{
-            loggedUser="nouser";
-            console.log("dins else: "+loggedUser);
+            document.getElementById("userid").value="nouser";
+            console.log("NO EXISTEIX EL USERID O CONTRASENYA INCORRECTA");
         }
 
     });
-    console.log("abans return: "+loggedUser);
-    //return loggedUser;
 }
 
 //ALTRES FUNCIONS AUXILIARS
@@ -364,23 +357,3 @@ function consola(dades){ //funció per mostrar a la consola el contingut de l'ar
       });
 
 }
-
-
-var prova = ["aaa","bbb","ccc"]; // An array with some objects
-
-function callbackClosure(i, callback) {
-  return function() {
-    return callback(i);
-  }
-}
-
-/*
-for( var i = 0; i < prova.length; ++i )
-{
-  API.doSthWithCallbacks( callbackClosure( i, function(i) {
-    prova[i] = 42+i;
-  }) );
-}
-
-consola(prova);
-*/
