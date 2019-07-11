@@ -5,9 +5,17 @@ const KEY_BACK = 10009,
     KEY_LEFT = 37,
     KEY_UP = 38,
     KEY_RIGHT = 39,
-    KEY_DOWN = 40;
+    KEY_DOWN = 40,
+    KEY_TOOLS = 10135,
+    KEY_RED = 108,
+    KEY_GREEN = 20,
+    KEY_YELLOW = 21,
+    KEY_BLUE = 406;
+
 var i = 0,
-    j = 0;
+    j = 0,
+    toolActive = 0,
+	mainScreen = 0;
 
 window.onload = function() {
     // TODO:: Do your initialization job
@@ -99,6 +107,7 @@ function keyListenerSignIn(e) {
 }
 
 function keyListenerHome(e) {
+	mainScreen = 0;
     var target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
 
     if (e.keyCode === KEY_UP) {
@@ -216,6 +225,7 @@ function keyListenerKeyboard(e) {
 }
 
 function keyListenerRecipe(e) {
+	mainScreen = -1;
     console.log("EEP Estic dins");
     if (e.keyCode === KEY_BACK) {
         console.log("soc el back");
@@ -230,23 +240,135 @@ function keyListenerRecipe(e) {
         document.removeEventListener("keydown", keyListenerRecipe, false);
         document.addEventListener("keydown", keyListenerHome, false);
     }
+    
+    if (e.keyCode === KEY_TOOLS) {
+        document.removeEventListener("keydown", keyListenerRecipe, false);
+        document.addEventListener("keydown", keyListenerMenu, false);
+
+        console.log("soc TOOLS");
+    }
+}
+
+
+function keyListenerMenu(e) {
+	
+    console.log("soc TOOLS");
+    var target = document.getElementsByClassName("icon-menu");
+    console.log(target[toolActive])
+    
+    if (e.keyCode === KEY_LEFT) {
+        if(toolActive != 0){
+            target[toolActive].classList.remove("active-menu");
+        	toolActive--;
+            target[toolActive].classList.add("active-menu");
+            console.log(target[toolActive])
+        }
+    }
+    
+    if (e.keyCode === KEY_RIGHT) {
+        if(toolActive != 4){
+            target[toolActive].classList.remove("active-menu");
+        	toolActive++;
+            target[toolActive].classList.add("active-menu");
+            console.log(target[toolActive])
+        }    
+    }
+    
+    if (e.keyCode === KEY_ENTER) {
+        jumpToScreen();  
+    }
+	
+    if (e.keyCode === KEY_DOWN) {
+        returnToEventListener();
+    }
+    
+    if (e.keyCode === KEY_TOOLS) {
+        returnToEventListener();
+
+    }
+}
+
+function returnToEventListener(){
+    document.removeEventListener("keydown", keyListenerMenu, false);
+	switch (mainScreen) {
+	case -1:
+        document.addEventListener("keydown", keyListenerRecipe, false);
+        console.log("RETORNO A RECIPES")
+		break;
+	default:
+        document.addEventListener("keydown", keyListenerHome, false);
+    	console.log("RETORNO A HOME")
+		break;
+	}
+}
+
+
+function jumpToScreen(){
+	switch (toolActive) {
+		case 0:
+			mainScreen = 0;
+	        console.log("VAIG A HOME");
+			startHome();
+			break;
+		case 1:
+			mainScreen = 0;
+	        console.log("VAIG A NEWS");
+			loadNews();
+			break;
+		case 2:
+			mainScreen = 0;
+	        console.log("VAIG A BLOG");
+			loadBlog();
+			break;
+		case 3:
+			mainScreen = 0;
+	        console.log("VAIG A FAV");
+			loadFav();
+			break;
+		case 4:
+			mainScreen = 0;
+	        console.log("VAIG A SEARCH");
+			loadSearch();
+			break;
+		default:
+			mainScreen = -1;
+	    	console.log("ERROR NO ESTA DINS DEL MARGE");
+			break;
+	}
 }
 
 
 function signIn() {
     //  console.log(tizen.tvinputdevice.getSupportedKeys());
+	
+	signInCheck($("#user_name").val(), $("#user_password").val());
+	checkUserId();
 
-    i = 0;
-    j = 0;
-    $("#master").fadeOut("slow", "linear", $("#home").show());
-    $('.modal-backdrop').remove();
-    document.removeEventListener("keydown", keyListenerSignIn, false);
-    startHome();
-    //CAL REGISTRAR L'USUARI I FER COMPROVACIONS DE REGISTRE
+	
+	//$.when(signInCheck($("#user_name").val(), $("#user_password").val())).done(checkUserId());    
+    
 }
+
+function checkUserId(){
+	if( document.getElementById("userid").value == "nouser" || document.getElementById("userid").value == null){	
+    	$("#user_name").val('');
+    	$("#user_password").val('')
+    	console.log("ERROOOOOOOOOOR");
+    }else{    
+        i = 0;
+        j = 0;
+        console.log("CORRECT USEEEEERRR")
+        $("#master").fadeOut("slow", "linear", $("#home").show());
+        $('.modal-backdrop').remove();
+        document.removeEventListener("keydown", keyListenerSignIn, false);
+    	startHome();
+    }
+}
+
 
 function loadHomeInfo() {
     console.log("He entrat HOME");
+    getUserData(document.getElementById("userid").value)
     //window.location.replace("index.html");
     $("#recipe").hide();
     $("#search").hide();
@@ -458,4 +580,93 @@ $(function() {
     $('input.jQKeyboard').initKeypad({
         'keyboardLayout': keyboard
     });
+    
+    $('input.selected').initKeypad({
+        'keyboardLayout': keyboard
+    });
 });
+
+
+
+/*==================================================================
+							[ LOGIN JS]
+====================================================================*/
+
+
+(function ($) {
+    "use strict";
+
+    /*==================================================================
+    [ Validate after type ]*/
+    $('.validate-input .input100').each(function(){
+        $(this).on('blur', function(){
+            if(validate(this) == false){
+                showValidate(this);
+            }
+            else {
+                $(this).parent().addClass('true-validate');
+            }
+        })    
+    })
+  
+  
+    /*==================================================================
+    [ Validate ]*/
+    var input = $('.validate-input .input100');
+
+    $('.validate-form').on('submit',function(){
+        var check = true;
+
+        for(var i=0; i<input.length; i++) {
+            if(validate(input[i]) == false){
+                showValidate(input[i]);
+                check=false;
+            }
+        }
+
+        return check;
+    });
+
+
+    $('.validate-form .input100').each(function(){
+        $(this).focus(function(){
+           hideValidate(this);
+           $(this).parent().removeClass('true-validate');
+        });
+    });
+
+     function validate (input) {
+        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
+            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+                return false;
+            }
+        }
+        else {
+            if($(input).val().trim() == ''){
+                return false;
+            }
+        }
+    }
+
+    function showValidate(input) {
+        var thisAlert = $(input).parent();
+
+        $(thisAlert).addClass('alert-validate');
+
+        $(thisAlert).append('<span class="btn-hide-validate">&#xf135;</span>')
+        $('.btn-hide-validate').each(function(){
+            $(this).on('click',function(){
+               hideValidate(this);
+            });
+        });
+    }
+
+    function hideValidate(input) {
+        var thisAlert = $(input).parent();
+        $(thisAlert).removeClass('alert-validate');
+        $(thisAlert).find('.btn-hide-validate').remove();
+    }
+    
+    
+
+})(jQuery);

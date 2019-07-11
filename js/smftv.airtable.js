@@ -10,8 +10,8 @@ const base = Airtable.base('apps61lsWyWr8NNur');
 
 /*getRecepta("recZyEyBJMkrgWo3V"); //TEMP*/
 //cerca(['hamburguesa','canelons','bistec'],"capa"); //TEMP
-signInCheck("rfermizo","12345");
-getUserData('recYlrPq4TsMQjrsm');
+/*signInCheck("rfermizo","12345");
+getUserData('recYlrPq4TsMQjrsm');*/
 
 //FUNCIONS DE CONSULTA
 
@@ -77,9 +77,9 @@ function getUserData(idUser){
         var AvatarImg = record.get("AvatarImg")[0].thumbnails.small.url;
 
         consola([username,nom,AvatarImg]);
-
-        //MAQUETACIÓ
-
+        $('#avatar').attr("src",AvatarImg);
+        $('#avatar_name').text(nom + " as " + username);
+        //AFEGIR NOM DE L'USUARI
     });
 }
 
@@ -340,7 +340,7 @@ function signInCheck(userName,pass){
         		//PASS I USER OK
             document.getElementById("userid").value = records[0].getId();
             console.log("EXISTEIX USERID: "+document.getElementById("userid").value+" i és: "+records[0].get("usuari")+" "+records[0].get("Password"));
-            
+            checkUserId();
         }else{
             document.getElementById("userid").value="nouser";
             console.log("NO EXISTEIX EL USERID O CONTRASENYA INCORRECTA");
