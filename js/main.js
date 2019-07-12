@@ -109,6 +109,13 @@ function keyListenerSignIn(e) {
 function keyListenerHome(e) {
 	mainScreen = 0;
     var target = document.getElementsByClassName("row")[i].getElementsByClassName("row-item");
+    
+    if (e.keyCode === KEY_TOOLS) {
+        document.removeEventListener("keydown", keyListenerHome, false);
+        document.addEventListener("keydown", keyListenerMenu, false);
+
+        console.log("soc TOOLS");
+    }
 
     if (e.keyCode === KEY_UP) {
         /*if(i === 1){
